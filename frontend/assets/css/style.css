@@ -1,0 +1,60 @@
+/* ===== Loader Overlay ===== */
+.loader {
+  position: fixed;
+  inset: 0;                    /* top/right/bottom/left: 0 */
+  display: grid;
+  place-items: center;         /* centers the image */
+  background: #ffffff9e;
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+    
+  /* Fade behavior */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 580ms ease, visibility 580ms ease;
+}
+
+.loader.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.loader img {
+  width: min(160px, 25vw);
+  height: auto;
+  transform-origin: center;
+  animation: loaderPulse 1000ms ease-in-out infinite;
+  will-change: transform, filter;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)); /* Simulate inner shadow */
+}
+
+/* Animation with scaling effect */
+@keyframes loaderPulse {
+  0% {
+    transform: scale(0.99);
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.4)); /* Slight shadow */
+  }
+  50% {
+    transform: scale(1.01);
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.6)); /* Larger shadow at peak scale */
+  }
+  100% {
+    transform: scale(0.99);
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.4)); /* Slight shadow */
+  }
+}
+
+
+/* Smooth scale up/down loop */
+@keyframes loaderPulse2  {
+  0%   { transform: scale(0.95); }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(0.95); }
+}
+
+/* Optional: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .loader img { animation: none; }
+}
