@@ -1,3 +1,128 @@
+
+/* ===== Story Section ===== */
+.story {
+  display: none;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* .story .legacy-img {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+} */
+.story .legacy-img {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  width: 100%;
+  max-width: 700px;
+}
+
+/* 
+.story .person-img {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  max-width: 100%;
+  max-height: 100%;
+  width: 25%;
+  min-width: 90px;
+  max-width: 170px;
+
+}
+.story .p1{
+    top: 90px;
+    left: 30%;
+}
+.story .p2{
+    top: 234px;
+    left: 30%;
+}
+.story .p3{
+    top: 50%;
+    right: 15%;
+}
+.story .p4{
+    bottom: 10%;
+    left: 30%;
+} */
+.story_photo_container_top {
+  height: 50vh;
+  display: flex;
+  justify-content: space-between;
+  padding: 10vh 5%;  /* Vertical padding of 10vh and horizontal padding of 5% */
+  gap: 20px;  /* 10% gap between images */
+  flex: 1;  /* Take up half of the page height */
+  align-items: flex-end;
+  flex-direction: column;
+  padding-bottom: 10px;
+  padding-top: 90px;
+  margin-bottom: -15%;
+}
+.story_photo_container_top img {
+  width: 25%;  /* Makes each image take up 45% of the container width */
+  max-width: 150px;  /* Optional: cap image width for better appearance */
+  min-width: 90px;   /* Optional: minimum width for small screen sizes */
+  height: auto;
+  margin-left: 20%;
+  opacity: 0;
+transition: opacity 1s ease-in-out;
+}
+
+/* Bottom container - images stick to left and right */
+.story_photo_container_bottom {
+  display: flex;
+  justify-content: space-between;
+  padding: 5% 5%;  /* Horizontal padding of 5% */
+  gap: 20px;  /* 5% gap between images */
+  align-items: center;
+  flex-direction: column;
+}
+
+.story_photo_container_bottom img {
+  width: 25%;  /* Makes each image take up 45% of the container width */
+  max-width: 140px;  /* Optional: cap image width */
+  min-width: 90px;   /* Optional: minimum width */
+  height: auto;
+  margin-bottom: 20px;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+.story_photo_container_bottom .p3{
+    margin-right: -50%;
+}
+
+.story_photo_container_bottom .p4{
+    margin-left: -50%;
+    margin-bottom: 45px;
+    margin-top : -30px
+}
+.animate-wipe {
+  animation: wipeEffect 3s forwards;
+}
+@keyframes wipeEffect {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* For reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .story .legacy-img, .story .person-img {
+    transition: none;
+  }
+}
+
 /* ===== Loader Overlay ===== */
 .loader {
   position: fixed;
