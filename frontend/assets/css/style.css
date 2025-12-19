@@ -20,7 +20,10 @@ body, html {
 
 /* Flex container */
 .intro_section {
+    transition: opacity 1s ease-in-out;
+    opacity: 0;
     display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;

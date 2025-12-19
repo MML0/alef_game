@@ -78,18 +78,36 @@ function showStorySection() {
 //      showPersonImages();
 //    }, 500); 
 }
+function showIntroSection() {
+    const introSection = document.querySelector('.intro_section');
+    introSection.style.display = 'flex';  // Show the section
+    setTimeout(() => {
+        introSection.style.opacity = 1;  // Fade in by changing opacity
+    }, 20);  // Slight delay to ensure the display change takes effect
+}
+
+function hideIntroSection() {
+    const introSection = document.querySelector('.intro_section');
+    introSection.style.opacity = 0;  // Fade out by changing opacity
+    setTimeout(() => {
+        introSection.style.display = 'none';  // Hide the section after fading out
+    }, 1000);  // Delay to match the opacity transition time
+}
 
 
 
 
-// setTimeout(Loader.show, 100); // Show the loader after 1 second
+setTimeout(Loader.show, 10); // Show the loader after 1 second
 
 document.addEventListener("DOMContentLoaded", function () {
   // Show loader, then hide it after 3 seconds
-//   setTimeout(Loader.hide, 2500); // Hide the loader after 4 seconds
+  setTimeout(Loader.hide, 1500); // Hide the loader after 4 seconds
 
   // After the loader hides, show the story section with animations
 //   setTimeout(showStorySection, 4500);  // Adjust to fit loader hide time
 
+    // Hide the intro section after 5 seconds for demonstration
+    setTimeout(showIntroSection, 1200);
+    // setTimeout(hideIntroSection, 5000);
 
 });
