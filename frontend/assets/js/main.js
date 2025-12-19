@@ -23,7 +23,7 @@ function try_to_log_in() {
     };
 
     // Make the POST request
-    fetch(`${apiUrl}/login`, {
+    fetch(`${apiUrl}/login.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -34,18 +34,68 @@ function try_to_log_in() {
     .then(data => {
         // Handle the received data
         if (data.success) {
-            alert('ورود موفقیت‌آمیز بود');
+            showToast('ورود موفقیت‌آمیز بود', { duration: 1000 });
             // Redirect or do something based on success
         } else {
-            alert('ورود ناموفق. لطفاً دوباره تلاش کنید.');
+            showToast('ورود ناموفق. لطفاً دوباره تلاش کنید.', { duration: 1000 });
+
         }
     })
     .catch(error => {
         // Handle any error
         console.error('Error:', error);
-        alert('خطا در ارتباط با سرور.');
+        showToast('خطا در ارتباط با سرور.', { duration: 1000 });
     });
 }
+
+// Toast utility
+(function () {
+  // ensure a single root
+  function getToastRoot() {
+    let root = document.getElementById('toast-root');
+    if (!root) {
+      root = document.createElement('div');
+      root.id = 'toast-root';
+      document.body.appendChild(root);
+    }
+    return root;
+  }
+
+  // Create and show a toast
+  window.showToast = function (message, {
+    duration = 2000,
+    dark = false,
+    id = null, // set to avoid duplicates if you want
+  } = {}) {
+    const root = getToastRoot();
+
+    // optional: prevent duplicate by id
+    if (id && root.querySelector(`.toast[data-id="${id}"]`)) {
+      return;
+    }
+
+    const el = document.createElement('div');
+    el.className = 'toast';
+    if (dark) el.classList.add('dark');
+    if (id) el.dataset.id = id;
+    el.textContent = message;
+
+    root.appendChild(el);
+
+    // fade in
+    requestAnimationFrame(() => el.classList.add('show'));
+
+    // fade out + remove
+    const hide = () => {
+      el.classList.remove('show');
+      setTimeout(() => el.remove(), 220);
+    };
+    setTimeout(hide, duration);
+
+    return el;
+  };
+})();
+
 // loader.js
 (function (global) {
   const DEFAULT_ID = "appLoader";
