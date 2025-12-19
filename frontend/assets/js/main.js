@@ -2,6 +2,50 @@ const apiUrl = 'https://your-api-url.com'; // Global URL
 
 
 
+
+
+
+
+function try_to_log_in() {
+    const fullName = document.getElementById('fullName').value.trim();
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    
+    // Check if inputs are valid
+    if (!fullName || !phoneNumber) {
+        alert('نام و شماره تلفن باید پر شوند.');
+        return;
+    }
+
+    const data = {
+        action: 'login',  // Action for login
+        name: fullName,
+        phone: phoneNumber
+    };
+
+    // Make the POST request
+    fetch(`${apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the received data
+        if (data.success) {
+            alert('ورود موفقیت‌آمیز بود');
+            // Redirect or do something based on success
+        } else {
+            alert('ورود ناموفق. لطفاً دوباره تلاش کنید.');
+        }
+    })
+    .catch(error => {
+        // Handle any error
+        console.error('Error:', error);
+        alert('خطا در ارتباط با سرور.');
+    });
+}
 // loader.js
 (function (global) {
   const DEFAULT_ID = "appLoader";
