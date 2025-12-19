@@ -82,14 +82,14 @@ function showStorySection() {
 
 
 
-setTimeout(Loader.show, 100); // Show the loader after 1 second
+// setTimeout(Loader.show, 100); // Show the loader after 1 second
 
 document.addEventListener("DOMContentLoaded", function () {
   // Show loader, then hide it after 3 seconds
-  setTimeout(Loader.hide, 2500); // Hide the loader after 4 seconds
+//   setTimeout(Loader.hide, 2500); // Hide the loader after 4 seconds
 
   // After the loader hides, show the story section with animations
-  setTimeout(showStorySection, 4500);  // Adjust to fit loader hide time
+//   setTimeout(showStorySection, 4500);  // Adjust to fit loader hide time
 
 
 });

@@ -1,6 +1,212 @@
 
 
 
+@font-face {
+    font-family: 'Modam';
+    src: url('../fonts/Modam-Regular.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 400;
+}
+
+/* General styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Modam', sans-serif;  /* Use a Persian-friendly font */
+    direction: rtl; /* Right-to-left text direction */
+    background-color: #f4f4f4; /* Background color */
+    color: #333; /* Text color */
+}
+
+/* Flex container */
+.intro_section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0px;
+    height: 100vh;
+    justify-content: space-evenly;
+}
+
+
+/* Header styling */
+.header {
+    position: fixed; /* Fixed position to keep the header at the top */
+    top: 20px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 10; /* Ensure header stays above other elements */
+    padding: 20px 0; /* Optional: add some spacing for the header */
+}
+
+.header img {
+    max-width: 72px;  /* Resize logo for mobile */
+    height: auto;
+}
+
+/* Banner section */
+.baner {
+    top: 11vh;
+    position: fixed;
+    z-index: 11; 
+    width: 100%;
+    margin-top: 20px; /* Ensure space below the fixed header */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px; /* Adjust height of the banner as needed */
+    overflow: hidden; /* Ensure nothing overflows the container */
+}
+
+/* Styling for images in the banner */
+.baner img {
+    position: absolute; /* Fix the banner image in place */
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%); /* Center it horizontally */
+    z-index: 11; /* Ensure the image stays above the clouds */
+    margin: 0;
+    max-width: 230px;
+    height: auto;
+}
+/* Cloud styling */
+.baner .cloud {
+    position: absolute;
+    max-width: 200px;
+    height: auto;
+    animation-duration: 8s; /* Cloud animation duration */
+    animation-timing-function: ease-in-out;
+}
+@media (min-width: 700px) {
+    .baner .cloud {
+        display: none; /* Hide clouds on larger screens */
+    }
+}
+.baner .cloud.left {
+    left: 0%; /* Start from left outside the view */
+    animation: cloudAnimationLeft 8s ;
+    transform: translateY(-30px) translateX(-70px);
+}
+
+.baner .cloud.right {
+    right: 0%; /* Start from right outside the view */
+    animation: cloudAnimationRight 8s ;
+    transform: translateY(40px) translateX(90px);
+}
+
+/* Left Cloud Animation */
+@keyframes cloudAnimationLeft {
+    0% {
+        transform: translateY(-30px) translateX(0);
+    }
+    50% {
+        transform: translateY(-30px) translateX(-70px); /* Move left but not off-screen */
+    }
+    100% {
+        transform: translateY(-30px) translateX(-70px); /* Stay at the left side */
+    }
+}
+
+/* Right Cloud Animation */
+@keyframes cloudAnimationRight {
+    0% {
+        transform: translateY(30px) translateX(0);
+    }
+    50% {
+        transform: translateY(40px) translateX(90px); /* Move right but not off-screen */
+    }
+    100% {
+        transform: translateY(40px) translateX(90px); /* Stay at the right side */
+    }
+}
+
+
+/* Intro text section */
+.intro_text_div {
+    text-align: right;
+    margin: 10px;
+    margin-bottom: 20px;
+    margin-top: 36vh;
+    max-width: 370px;
+    background-color: #02546d00;
+}
+
+.intro_text_div .intro_title {
+    font-family: 'Modam', sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.intro_text_div .intro_text {
+    font-family: 'Modam', sans-serif;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+/* Anar images */
+.anar_div {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    width: 300px;
+}
+
+.anar_img {
+    width: 52px;
+    position: relative;
+    transform: rotate(-10deg); /* Slight rotation */
+    margin: 1px 10px;
+}
+.anar_div .left{
+    margin-left: -30px !important;
+    transform: rotate(24deg);
+}
+/* Next button */
+.next_btn_div {
+    display: flex; /* Enable Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin-top: 20px;
+    margin-bottom: 50px;
+    width: 100%; /* Ensure the div takes full width */
+}
+
+.next_btn_div .continue_btn {
+    font-family: 'Modam', sans-serif;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #02546D; /* Adjust as per theme */
+    color: #FFFFFF;
+    border: 1px solid #6E8496;
+    cursor: pointer;
+    max-width: 360px;
+    height: 60px;
+    width: 95%; /* You can adjust the width of the button */
+}
+
+/* Footer styling */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffff00;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 0px;
+}
+
+.footer .text {
+    font-size: 12px;
+}
+
+.footer span {
+    font-weight: bold;
+    font-size: 13px;
+}
 
 
 /* ===== Story Section ===== */
