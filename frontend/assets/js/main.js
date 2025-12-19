@@ -1,3 +1,7 @@
+const apiUrl = 'https://your-api-url.com'; // Global URL
+
+
+
 // loader.js
 (function (global) {
   const DEFAULT_ID = "appLoader";
@@ -85,7 +89,6 @@ function showIntroSection() {
         introSection.style.opacity = 1;  // Fade in by changing opacity
     }, 20);  // Slight delay to ensure the display change takes effect
 }
-
 function hideIntroSection() {
     const introSection = document.querySelector('.intro_section');
     introSection.style.opacity = 0;  // Fade out by changing opacity
@@ -93,21 +96,95 @@ function hideIntroSection() {
         introSection.style.display = 'none';  // Hide the section after fading out
     }, 1000);  // Delay to match the opacity transition time
 }
+// Function to convert Persian numerals to Arabic numerals
+function convertPersianToArabic(persianNum) {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    const arabicDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+    return persianNum.split('').map(function(char) {
+        const index = persianDigits.indexOf(char);
+        return index !== -1 ? arabicDigits[index] : char;
+    }).join('');
+}
+
+// Function to validate the phone number
+function validatePhoneNumber(event) {
+    event.preventDefault();
+    const phoneInput = document.getElementById('phoneNumber');
+    let phoneNumber = phoneInput.value;
+
+    // Convert Persian digits to Arabic digits
+    phoneNumber = convertPersianToArabic(phoneNumber);
+
+    // Validate the phone number using a regular expression
+    const phonePattern = /^09\d{9}$/;
+
+    if (!phonePattern.test(phoneNumber)) {
+        // Raise an error and change the title of the input
+        phoneInput.setCustomValidity('شماره تلفن باید با ۰۹ شروع شود و ۱۱ رقم باشد.');
+        phoneInput.reportValidity(); // Trigger the form's built-in validation to show the error message
+    } else {
+        // Reset the validity and clear any previous error
+        phoneInput.setCustomValidity('');
+        try_to_log_in();
+    }
+}
+
+// Add event listener for input change (optional)
+document.getElementById('phoneNumber').addEventListener('input', function() {
+    this.setCustomValidity('');  // Reset the custom validity message on input change
+});
+
+function show_login_page() {
+
+    document.getElementById('anar_div').style.display = 'none';
+    document.getElementById('nex_btn_intro_div').style.display = 'none';
+    document.getElementById('intro_page1').style.display = 'none';
+    document.getElementById('intro_page2').style.display = 'block';
+    setTimeout(() => {
+        // introSection.style.display = 'none';  // Hide the section after fading out
+    }, 1000);  // Delay to match the opacity transition time
+}
 
 
 
 
-setTimeout(Loader.show, 10); // Show the loader after 1 second
+// setTimeout(Loader.show, 10); // Show the loader after 1 second
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Show loader, then hide it after 3 seconds
-  setTimeout(Loader.hide, 1500); // Hide the loader after 4 seconds
+    const continueBtn = document.getElementById('continueBtn');
+    setTimeout(() => {
+    // continueBtn.click();  
+    }, 500);
 
-  // After the loader hides, show the story section with animations
-//   setTimeout(showStorySection, 4500);  // Adjust to fit loader hide time
+
+    continueBtn.addEventListener('click', function() {
+        continueBtn.disabled = true;  // Disables the button
+        Loader.show()
+        setTimeout(Loader.hide, 900); // Show the loader after 1 second
+        setTimeout(show_login_page, 300); // Show the loader after 1 second
+    });
+
+
+
+    // Show loader, then hide it after 3 seconds
+    // setTimeout(Loader.hide, 1500); // Hide the loader after 4 seconds
+
+    // // After the loader hides, show the story section with animations
+    // setTimeout(showStorySection, 1500);  // took 3 sec // Adjust to fit loader hide time
 
     // Hide the intro section after 5 seconds for demonstration
-    setTimeout(showIntroSection, 1200);
-    // setTimeout(hideIntroSection, 5000);
+    // setTimeout(showIntroSection, 5500);
+    setTimeout(showIntroSection, 100);
+    // // //  setTimeout(hideIntroSection, 5000);
+
+
+
+    document.getElementById('phoneNumber').addEventListener('input', function() {
+    const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    this.value = this.value.replace(/[0-9]/g, function(match) {
+        return persianNumbers[parseInt(match)];
+    });
+    });
 
 });

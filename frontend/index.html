@@ -36,17 +36,36 @@
             <img src="assets/img/cloud.png" alt="cloud" class="cloud left" />
             <img src="assets/img/cloud.png" alt="cloud" class="cloud right" />
         </div>
-        <div class="intro_text_div">
+        <div id="intro_page1" class="intro_text_div">
             <p class="intro_title">همکار عزیز، به مسابقه‌ی یلدایی «الف» خوش اومدی!</p>
             <p class="intro_text">قراره به مناسبت یلدا، هویت الف و زیرمجموعه‌هاش رو بهتر بشناسی و با چالش سرعت و دقت، برنده‌ی یکی از ۵ جاروبرقی Flow پاکشوما بشی.</p>
             <p class="intro_title">یلدا مبارک و مسیرت درخشان!</p>
         </div>
-        <div class="anar_div">
+        <div id="anar_div" class="anar_div">
             <img src="assets/img/BG_anaar.png" alt="anar" class="anar_img left" />
             <img src="assets/img/BG_anaar.png" alt="anar" class="anar_img right" />
         </div>
-        <div class="next_btn_div">
-            <button class="continue_btn">ادامه</button>
+
+        <div id="intro_page2" class="intro_text_div">
+            <form id="challengeForm"  onsubmit="validatePhoneNumber(event)">
+                <p class="bold">برای شروع مسابقه، لطفاً نام کامل و شماره تلفن همراه خود را وارد کنید.</p>
+                <p ><span class="bold">نکته مهم:</span> توی این چالش، باید با محدودیت زمانی 10 دقیقه، به 10 سوال پاسخ بدی. برنده کسایی هستن که در مدت زمان کمتر، پاسخ های صحیح بیشتری داشته باشن.</p>
+
+                <label for="fullName">نام کامل</label>
+                <input type="text" id="fullName" name="fullName"  autocomplete="off" placeholder="نام کامل خود را وارد کنید" required>
+                
+
+                <label for="phoneNumber">شماره تلفن همراه</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber"  autocomplete="off" placeholder="۰۹۱۲۳۴۵۶۷۸" required   title="شماره تلفن باید با ۰۹ شروع شود و ۱۱ رقم باشد.">
+                <div class="next_btn_div">
+                    <button id="loginBtn"  type="submit" class="continue_btn"  >شروع چالش</button>
+                </div>    
+            </form>
+        </div>
+
+
+        <div class="next_btn_div" id="nex_btn_intro_div">
+            <button id="continueBtn" class="continue_btn">ادامه</button>
         </div>
         <div class="footer">
             <p class="text">Powered by <span>Alef Corporation</span></p>

@@ -12,10 +12,88 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Modam', sans-serif;  /* Use a Persian-friendly font */
+    font-family: 'Modam', sans-serif; 
     direction: rtl; /* Right-to-left text direction */
     background-color: #f4f4f4; /* Background color */
     color: #333; /* Text color */
+}
+#loginBtn{
+    width: 100%;
+}
+label{
+    margin-right: 5px;
+}
+label, input {
+    display: block;
+    margin-bottom: 1px; /* Adjust the space between elements */
+}
+.bold{
+    font-weight: bold;
+
+}
+#fullName{
+    font-family: 'Modam', sans-serif;  
+    width: 92%;    
+    margin: auto;
+
+    height: 50px;
+    padding: 0px 10px;
+    font-size: 20px;
+    border: 1px solid #6E8496;
+
+    max-width: 360px;
+    margin-bottom: 20px;
+}
+#phoneNumber{
+    margin: auto;
+
+    font-family: 'Modam', sans-serif;  
+    padding: 0px 10px;
+    width: 92%;
+    border: 1px solid #6E8496;
+    height: 50px;
+    font-size: 20px;
+    max-width: 360px;
+}
+#intro_page2{
+    display: none;
+}
+#intro_page2 p.bold:first-of-type {
+    font-size: 14px;
+}
+#intro_page2 p:not(.bold) {
+    font-size: 14px;
+}
+/* small phone for login page */
+@media (max-height: 720px){
+    #fullName{
+        height: 40px;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    #phoneNumber{
+        height: 40px;
+        font-size: 18px;
+    }
+    .baner{ top:6vh; }
+    #intro_page2 p.bold:first-of-type {
+        font-size: 14px;
+    }
+    #intro_page2 p:not(.bold) {
+        font-size: 13px;
+    }
+    .intro_text_div {
+        margin-top: 33vh !important;
+            margin-bottom: 5px !important;
+    }
+    .baner {
+        top: 6vh !important;
+    }
+    .header {
+        top: 10px !important;}
+    .next_btn_div{
+        margin-top: 10px !important;
+    }
 }
 
 /* Flex container */
@@ -159,14 +237,17 @@ body, html {
 }
 
 .anar_img {
-    width: 52px;
+    width: 60px;
     position: relative;
     transform: rotate(-10deg); /* Slight rotation */
-    margin: 1px 10px;
+    margin: -10px  10px;
 }
 .anar_div .left{
     margin-left: -30px !important;
     transform: rotate(24deg);
+}
+.anar_div .right{
+        transform: translateY(-5px) translateX(-13px) rotate(-17deg);
 }
 /* Next button */
 .next_btn_div {
@@ -174,7 +255,7 @@ body, html {
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     margin-top: 20px;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
     width: 100%; /* Ensure the div takes full width */
 }
 
@@ -342,8 +423,8 @@ transition: opacity 1s ease-in-out;
   inset: 0;                    /* top/right/bottom/left: 0 */
   display: grid;
   place-items: center;         /* centers the image */
-  background: #ffffff9e;
-  backdrop-filter: blur(4px);
+  background: #ffffffb2;
+  backdrop-filter: blur(10px);
   z-index: 9999;
     
   /* Fade behavior */
@@ -360,7 +441,7 @@ transition: opacity 1s ease-in-out;
 }
 
 .loader img {
-  width: min(160px, 25vw);
+  width: min(100px, 25vw);
   height: auto;
   transform-origin: center;
   animation: loaderPulse 1000ms ease-in-out infinite;
