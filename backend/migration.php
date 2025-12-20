@@ -7,7 +7,7 @@ function createTables($fresh) {
     try {
         // If fresh is 'yes', drop the tables first
         if ($fresh === 'yes') {
-            $pdo->exec("DROP TABLE IF EXISTS answers, users, questions;");
+            $pdo->exec("DROP TABLE IF EXISTS answers, users, questions, game_stats;");
             echo "Tables dropped successfully!<br>";
         }
 
@@ -22,6 +22,8 @@ function createTables($fresh) {
                 score INT DEFAULT 0,
                 current_question INT DEFAULT 1,
                 start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                start_game_time TIMESTAMP NULL,  
+                end_game_time TIMESTAMP NULL,    
                 game_status ENUM('not_started', 'ongoing', 'completed') DEFAULT 'not_started',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
@@ -54,7 +56,20 @@ function createTables($fresh) {
                 FOREIGN KEY (question_id) REFERENCES questions(id)
             );
         ");
-        
+        // Create Game Stats Table (for storing game results for the top users)
+        $pdo->exec(" 
+            CREATE TABLE IF NOT EXISTS game_stats (
+                game_status ENUM('not_started', 'ongoing', 'ended') DEFAULT 'not_started'
+            );
+        ");
+        // Insert initial 'not_started' status if no records exist
+        $stmt = $pdo->prepare("
+            INSERT INTO game_stats (game_status)
+            SELECT 'not_started'
+            WHERE NOT EXISTS (SELECT 1 FROM game_stats)
+        ");
+        $stmt->execute();
+
         echo "Database tables created successfully!<br>";
 
         // If 'fresh' is 'yes', populate the database with random data

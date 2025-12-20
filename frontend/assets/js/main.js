@@ -12,7 +12,6 @@ const loaderImages = [
     'assets/img/cloud.png',
 ];
 
-
 // Function to check if font is loaded
 function isFontLoaded(fontName, callback) {
     const testElement = document.createElement('span');
@@ -45,7 +44,6 @@ function isFontLoaded(fontName, callback) {
         }
     }, 100);  // Check after 100 ms
 }
-
 // Function to load images into the loader section and handle the loading state
 function loadImages(callback) {
     const loaderContainer = document.createElement('div');
@@ -89,7 +87,6 @@ function loadImages(callback) {
         loaderContainer.appendChild(img);
     });
 }
-
 // Function to check if font is loaded before proceeding
 function checkFontLoaded(callback) {
     isFontLoaded('Modam', (fontLoaded) => {  // Replace 'Modam' with your font name
@@ -102,7 +99,6 @@ function checkFontLoaded(callback) {
         }
     });
 }
-
 function try_to_log_in() {
     const fullName = document.getElementById('fullName').value.trim();
     const phoneNumber = document.getElementById('phoneNumber').value.trim();
@@ -135,8 +131,10 @@ function try_to_log_in() {
             Loader.show()
             localStorage.setItem('user_token', data.token);
             localStorage.setItem('current_question', data.current_question);
-            setTimeout(Loader.hide, 1900); // Show the loader after 1 second
+            show_question(data.current_question,data.question_text,data.answers);
+            show_question(data.current_question,data.question_text,data.answers);
 
+            setTimeout(Loader.hide, 1900); // Show the loader after 1 second
             // Redirect or do something based on success
         } else {
             // Handle specific error messages from the backend
@@ -157,7 +155,6 @@ function try_to_log_in() {
     });
 
 }
-
 // Toast utility
 (function () {
   // ensure a single root
@@ -349,7 +346,46 @@ function show_login_page() {
         // introSection.style.display = 'none';  // Hide the section after fading out
     }, 1000);  // Delay to match the opacity transition time
 }
+function check_is_game_ready() {
+      // Make the POST request
+    fetch(`${apiUrl}/login.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data), // Ensure you are sending this as a JSON string
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the received data
+        if (data.status === 'success') {
+            showToast('ورود موفقیت‌آمیز بود', { duration: 1000 });
+            Loader.show()
+            localStorage.setItem('user_token', data.token);
+            localStorage.setItem('current_question', data.current_question);
+            show_question(data.current_question,data.question_text,data.answers);
+            show_question(data.current_question,data.question_text,data.answers);
 
+            setTimeout(Loader.hide, 1900); // Show the loader after 1 second
+            // Redirect or do something based on success
+        } else {
+            // Handle specific error messages from the backend
+            if (data.message === 'Phone number is required') {
+                showToast('شماره تلفن الزامی است.', { duration: 1000 });
+            } else if (data.message === 'User not found') {
+                showToast('شماره تلفن یافت نشد.', { duration: 1000 });
+            } else {
+                // General error message for other cases
+                showToast('ورود ناموفق. لطفاً دوباره تلاش کنید.', { duration: 1000 });
+            }
+        }
+    })
+    .catch(error => {
+        // Handle any error
+        console.error('Error:', error);
+        showToast('خطا در ارتباط با سرور.', { duration: 1000 });
+    });
+}
 
 
 
