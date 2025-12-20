@@ -4,6 +4,13 @@
     font-style: normal;
     font-weight: 400;
 }
+@font-face {
+    font-family: 'GoftehFaNumWeb';
+    src: url('../fonts/GoftehFaNumWeb-Heavy.woff') format('woff');
+    font-style: normal;
+    font-weight: 400; /* Adjust the font-weight if necessary */
+}
+
 /* General styling */
 body, html {
     margin: 0;
@@ -54,6 +61,7 @@ body, html {
     flex-direction: row-reverse;
     height: 30px;
     color: #15354E;
+    font-family: 'GoftehFaNumWeb' ,'Modam' ;
 }
 
 .timer_text {
@@ -62,15 +70,17 @@ body, html {
     font-family: 'Modam', sans-serif;  
     margin: 5px;
 }
-
+.question_number_p{
+    font-family: 'GoftehFaNumWeb' ,'Modam' ;
+}
 .question_number_div {
-font-size: 24px;
+    font-size: 24px;
     font-weight: bold;
     color: #005c7f;
     width: 50px;
     height: 50px;
-    display: flex;
     border: 1px #E0E0E0 solid;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -104,32 +114,58 @@ font-size: 24px;
 }
 .answers_div {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 4fr;
     gap: 10px;
 }
 
 .answer_box {
+    display: flex;
     background-color: white;
-    padding: 15px;
+    padding: 0px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 0px;
     text-align: center;
     transition: background-color 0.3s ease;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    height: 80px;
 }
 
 .answer_box:hover {
-    background-color: #f1f1f1;
+    .answer_text {
+        background-color: #15354E;
+        color: #FFFFFF;
+    }
 }
 
 .ans_number {
+    border: 1px solid #D0D1D3;
+    margin: 0px;
+    height: 100%;
+    text-align: center;
+    padding: 0px 15px;
+    font-family: 'GoftehFaNumWeb', 'Modam';
     font-size: 20px;
     font-weight: bold;
-    color: #005c7f;
+    color: #404040;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .answer_text {
-    font-size: 14px;
-    color: #555;
+    border: 1px solid #D0D1D3;
+    font-size: 18px;
+    color: #000000;
+    font-family: 'Modam';
+    margin: 0px;
+    height: 100%;
+    text-align: center;
+    padding: 0px 15px;
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
 
 

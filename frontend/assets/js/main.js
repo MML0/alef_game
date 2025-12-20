@@ -48,8 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-function name(params) {
-  
+function show_score_board (score) {
+  console.log(score);
 }
 function get_next_question(user_token) {
     hideIntroSection()
@@ -77,8 +77,9 @@ function get_next_question(user_token) {
                 if (data.remaining_seconds==0){
                     showToast('times up', { duration: 2000 });
                     show_score_board(data.score);
+                }else{
+                  show_question(data.current_question, data.question_text, data.answers,data.remaining_seconds);
                 }
-                show_question(data.current_question, data.question_text, data.answers,data.remaining_seconds);
             }
         } else {
             // Handle specific error messages from the backend
