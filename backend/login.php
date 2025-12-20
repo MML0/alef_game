@@ -29,10 +29,7 @@ function loginUser($phone_number) {
         $current_question = $user['current_question'];
 
         // Get the question text and answers from the questions table
-        $question_stmt = $pdo->prepare("SELECT * FROM questions WHERE id = ?");
-        $question_stmt->execute([$current_question]);
-        $question = $question_stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         return [
             'status' => 'success',
             'user_id' => $user['id'],
@@ -40,13 +37,7 @@ function loginUser($phone_number) {
             'last_name' => $user['last_name'], 
             'token' => $token,
             'current_question' => $current_question,
-            'question_text' => $question['question_text'],
-            'answers' => [
-                $question['answer_1'],
-                $question['answer_2'],
-                $question['answer_3'],
-                $question['answer_4']
-            ]
+
         ];
     } else {
         return ['status' => 'error', 'message' => 'User not found'];

@@ -1,5 +1,8 @@
 <?php
 include 'db.php'; // Include the database connection
+header("Access-Control-Allow-Origin: *");  
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 // Check if the form has been submitted
 if (isset($_POST['action'])) {

@@ -1,10 +1,6 @@
 const apiUrl = 'http://127.0.0.1:3000/backend'; // Global URL
 
 
-
-
-
-
 const loaderImages = [
     'assets/img/legacy.png',
     'assets/img/baner.png',
@@ -12,37 +8,50 @@ const loaderImages = [
     'assets/img/cloud.png',
 ];
 
-// Function to check if font is loaded
-function isFontLoaded(fontName, callback) {
-    const testElement = document.createElement('span');
-    testElement.innerText = 'dummy text';
-    
-    // Apply inline styles for positioning and visibility
-    testElement.style.fontFamily = fontName;
-    testElement.style.position = 'absolute';
-    testElement.style.visibility = 'hidden'; // Keep it hidden off-screen
-    testElement.style.fontSize = '100px'; // Increase size to ensure font loads
-    testElement.style.whiteSpace = 'nowrap'; // Prevent wrapping
-    testElement.style.padding = '0';
-    testElement.style.margin = '0';
-    testElement.style.top = '-9999px'; // Move it far off-screen
-    testElement.style.left = '-9999px'; // Move it far off-screen
-    document.body.appendChild(testElement);
+function get_next_question(user_token) {
 
-    const initialWidth = testElement.offsetWidth;
+    const data = {
+        token: user_token,
+    };
 
-    setTimeout(() => {
-        const newWidth = testElement.offsetWidth;
-        document.body.removeChild(testElement);  // Remove the test element
-
-        if (newWidth !== initialWidth) {
-            console.log('Font loaded!');
-            callback(true);  // Font loaded
+    // Make the POST request
+    fetch(`${apiUrl}/get_next_question.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data), // Ensure you are sending this as a JSON string
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the received data
+        if (data.status === 'success') {
+            if (data.message === 'all questions answered') {
+                // Show the score board if all questions are answered
+                show_score_board(data.score);
+            } else {
+                // Otherwise, show the next question
+                show_question(data.current_question, data.question_text, data.answers);
+            }
         } else {
-            console.log('Font not loaded yet.');
-            callback(false);  // Font not loaded
+            // Handle specific error messages from the backend
+            if (data.message === 'game not started') {
+                showToast('لطفاً منتظر بمانید تا بازی شروع شود.', { duration: 1000 });
+            } else {
+                // General error message for other cases
+                showToast('ورود ناموفق. لطفاً دوباره تلاش کنید.', { duration: 1000 });
+            }
         }
-    }, 100);  // Check after 100 ms
+    })
+    .catch(error => {
+        // Handle any error
+        console.error('Error:', error);
+        showToast('خطا در ارتباط با سرور.', { duration: 1000 });
+    });
+}
+
+function show_question(current_number,question_text,answers) {
+
 }
 // Function to load images into the loader section and handle the loading state
 function loadImages(callback) {
@@ -73,7 +82,7 @@ function loadImages(callback) {
             console.log(`${img.src} loaded`);
             if (loadedImages === totalImages && !timeoutReached) {
                 clearTimeout(timeout);  // Clear the timeout if all images are loaded
-                checkFontLoaded(callback);  // Check if the font is loaded before calling callback
+                addDummyText(callback);  // Add dummy text and proceed
             }
         };
         img.onerror = () => {
@@ -81,23 +90,35 @@ function loadImages(callback) {
             loadedImages++;  // Still count as loaded to proceed
             if (loadedImages === totalImages && !timeoutReached) {
                 clearTimeout(timeout);  // Clear the timeout if all images are loaded
-                checkFontLoaded(callback);  // Check if the font is loaded before calling callback
+                addDummyText(callback);  // Add dummy text and proceed
             }
         };
         loaderContainer.appendChild(img);
     });
 }
-// Function to check if font is loaded before proceeding
-function checkFontLoaded(callback) {
-    isFontLoaded('Modam', (fontLoaded) => {  // Replace 'Modam' with your font name
-        if (fontLoaded) {
-            console.log('Font is loaded, proceeding...');
-            callback();  // Proceed after font is loaded
-        } else {
-            console.log('Font still not loaded, retrying...');
-            setTimeout(() => checkFontLoaded(callback), 100);  // Retry after 100ms if font isn't loaded
-        }
-    });
+// Function to add dummy text to ensure font gets loaded
+function addDummyText(callback) {
+    const testElement = document.createElement('span');
+    testElement.innerText = 'dummy text';
+    
+    // Apply inline styles for positioning and visibility
+    testElement.style.fontFamily = 'Modam';  // Set to the font you want
+    testElement.style.position = 'absolute';
+    testElement.style.visibility = 'hidden'; // Keep it hidden off-screen
+    testElement.style.fontSize = '100px'; // Increase size to ensure font loads
+    testElement.style.whiteSpace = 'nowrap'; // Prevent wrapping
+    testElement.style.padding = '0';
+    testElement.style.margin = '0';
+    testElement.style.top = '-9999px'; // Move it far off-screen
+    testElement.style.left = '-9999px'; // Move it far off-screen
+    document.body.appendChild(testElement);
+
+    // After adding dummy text, directly proceed to callback
+    setTimeout(() => {
+        console.log('Proceeding with the callback, regardless of font load state.');
+        document.body.removeChild(testElement);  // Remove the test element
+        callback();  // Proceed to callback
+    }, 100);  // Just wait a short time to ensure the dummy text is added
 }
 function try_to_log_in() {
     const fullName = document.getElementById('fullName').value.trim();
@@ -131,9 +152,7 @@ function try_to_log_in() {
             Loader.show()
             localStorage.setItem('user_token', data.token);
             localStorage.setItem('current_question', data.current_question);
-            show_question(data.current_question,data.question_text,data.answers);
-            show_question(data.current_question,data.question_text,data.answers);
-
+            get_next_question(data.token);
             setTimeout(Loader.hide, 1900); // Show the loader after 1 second
             // Redirect or do something based on success
         } else {
@@ -347,37 +366,43 @@ function show_login_page() {
     }, 1000);  // Delay to match the opacity transition time
 }
 function check_is_game_ready() {
-      // Make the POST request
-    fetch(`${apiUrl}/login.php`, {
+    // Make the POST request to get the game status
+    fetch(`${apiUrl}/get_game_status.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data), // Ensure you are sending this as a JSON string
+        body: JSON.stringify({}) // No data needed in this request
     })
     .then(response => response.json())
     .then(data => {
         // Handle the received data
         if (data.status === 'success') {
-            showToast('ورود موفقیت‌آمیز بود', { duration: 1000 });
-            Loader.show()
-            localStorage.setItem('user_token', data.token);
-            localStorage.setItem('current_question', data.current_question);
-            show_question(data.current_question,data.question_text,data.answers);
-            show_question(data.current_question,data.question_text,data.answers);
+            // Check game status
+            console.log(data);
+            
+            switch (data.game_status) {
+                case 'not_started':
+                    // showToast('منتظر بمانید...', { duration: 1500 });
+                    setTimeout(Loader.hide, 300); 
+                    setTimeout(() => {
+                      showToast('بازی در ساعت ۱۵ شروع می‌شود. منتظر بمانید...', { duration: 1500 });
+                    }, 500);
 
-            setTimeout(Loader.hide, 1900); // Show the loader after 1 second
-            // Redirect or do something based on success
-        } else {
-            // Handle specific error messages from the backend
-            if (data.message === 'Phone number is required') {
-                showToast('شماره تلفن الزامی است.', { duration: 1000 });
-            } else if (data.message === 'User not found') {
-                showToast('شماره تلفن یافت نشد.', { duration: 1000 });
-            } else {
-                // General error message for other cases
-                showToast('ورود ناموفق. لطفاً دوباره تلاش کنید.', { duration: 1000 });
+                    break;
+                case 'ongoing':
+                    setTimeout(show_login_page, 300); // Show the loader after 1 second
+                    break;
+                case 'completed':
+                    showToast('بازی به پایان رسید.', { duration: 1500 });
+                    break;
+                default:
+                    showToast('وضعیت بازی نامشخص است.', { duration: 1000 });
+                    break;
             }
+        } else {
+            // Handle error from the server
+            showToast('خطا در دریافت وضعیت بازی.', { duration: 1000 });
         }
     })
     .catch(error => {
@@ -386,23 +411,19 @@ function check_is_game_ready() {
         showToast('خطا در ارتباط با سرور.', { duration: 1000 });
     });
 }
-
-
-
 setTimeout(Loader.show, 10); // Show the loader after 1 second
 
 document.addEventListener("DOMContentLoaded", function () {
     const continueBtn = document.getElementById('continueBtn');
-    setTimeout(() => {
-    // continueBtn.click();  
-    }, 500);
-
-
+    //  همکار عزیز، 
     continueBtn.addEventListener('click', function() {
         continueBtn.disabled = true;  // Disables the button
         Loader.show()
+        check_is_game_ready()
         setTimeout(Loader.hide, 900); // Show the loader after 1 second
-        setTimeout(show_login_page, 300); // Show the loader after 1 second
+        setTimeout(() => {
+            continueBtn.disabled = false;  
+        }, 900);
     });
 
 
@@ -411,15 +432,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (token) {
         console.log("User token found:", token);
         setTimeout(Loader.hide, 1500); 
-        setTimeout(showIntroSection, 2500); // remove this 
+        // setTimeout(showIntroSection, 2500); // remove this 
         // skip the intro jump to next question 
+        get_next_question(token)
 
     } else {
         console.log("No user token found.");
         loadImages(() => {
           setTimeout(Loader.hide, 800); 
-          setTimeout(showStorySection, 800);  // took 3 sec // Adjust to fit loader hide time
-          setTimeout(showIntroSection, 4500);// Show story section after loader animation ends
+          setTimeout(showStorySection, 800);  // legecy took 3 sec // Adjust to fit loader hide time
+          setTimeout(showIntroSection, 4500);// Show rules section after loader animation ends
         });
 }
 
