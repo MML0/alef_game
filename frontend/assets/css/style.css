@@ -87,8 +87,9 @@ body, html {
 
 
 .line_seprator {
-    margin: 5px 0;
+    margin: 5px auto;
     border-top: 2px solid #ddd;
+    width: 90%;
 }
 
 .question_box {
@@ -152,6 +153,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 20px;
 }
 
 .answer_text {
@@ -219,6 +221,12 @@ label, input {
 }
 /* small phone for login page */
 @media (max-height: 720px){
+    .question_text {
+        margin-bottom: 20px;
+    }
+    .answer_box {
+        height: 70px;
+    }
     #fullName{
         height: 40px;
         font-size: 18px;
