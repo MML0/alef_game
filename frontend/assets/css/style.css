@@ -25,6 +25,34 @@ body, html {
 .score_board_container{
     display: none;
 }
+.score_board_container {
+    padding: 15px;
+    background: #f8f8f8;
+    border-radius: 10px;
+}
+.user_rank_box, .scoreboard_box {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.scoreboard_list {
+    list-style: none;
+    padding: 0;
+}
+.scoreboard_list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+
+
+
+
+
 .question_container {
     display: none;
     transition: opacity 0.4s ease-in-out;

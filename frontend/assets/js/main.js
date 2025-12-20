@@ -152,63 +152,88 @@ function show_score_board () {
     }, 400);
   }, 400);
   token = localStorage.getItem('user_token');
-  const data = {
-        token: token,
-  };
+  const scoreBoardContainer = document.querySelector('.score_board_container');
+
+  // 1️⃣ Fetch USER RANK
+  const data = { token: token };
+
   fetch(`${apiUrl}/get_user_rank.php`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data), // Use the same token for rank request
-    })
-    .then(response => response.json())
-    .then(rankData => {
-        // Handle the response data from the second request (User's Rank)
-        console.log("User Rank Data:", rankData);  // Log the rank response
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(rankData => {
+      console.log("User Rank Data:", rankData);
 
-        if (rankData.status === 'success') {
-            // Log and display user rank and score
-            console.log(`User Rank: ${rankData.user_rank}, Score: ${rankData.score}, Game Duration: ${rankData.game_duration_ms} ms`);
-            // You can also display the user's rank and score on the UI here
-            console.log(rankData.user_rank, rankData.score, rankData.game_duration_ms);
-        } else {
-            console.log("Error: " + rankData.message);
-            showToast('Error: ' + rankData.message, { duration: 2000 });
-        }
-    })
-    .catch(error => {
-        // Handle any error in the second request
-        console.error('Error in get_user_rank:', error);
-        showToast('خطا در دریافت اطلاعات رتبه کاربر.', { duration: 1000 });
-    });
-fetch(`${apiUrl}/scoreboard.php`, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-    }
-})
-.then(response => response.json())
-.then(scoreData => {
-    console.log("Scoreboard Data:", scoreData);
+      if (rankData.status === 'success') {
 
-    if (scoreData.status === 'success') {
-        scoreData.scoreboard.forEach((user, index) => {
-            console.log(
-                `#${index + 1} | ${user.first_name} ${user.last_name} | Score: ${user.score} | Duration: ${user.game_duration_ms} ms`
-            );
-        });
-    } else {
-        console.log("Error:", scoreData.message);
-        showToast('خطا در دریافت جدول امتیازات.', { duration: 2000 });
-    }
-})
-.catch(error => {
-    console.error('Error fetching scoreboard:', error);
-    showToast('خطا در دریافت جدول امتیازات.', { duration: 1000 });
-});
+          // Add user rank info to the container
+          scoreBoardContainer.innerHTML += `
+              <div class="user_rank_box">
+                  <h3>رتبه شما</h3>
+                  <p>رتبه: <strong>${rankData.user_rank}</strong></p>
+                  <p>امتیاز: <strong>${rankData.score}</strong></p>
+                  <p>زمان بازی: <strong>${rankData.game_duration_ms} ms</strong></p>
+              </div>
+          `;
 
+      } else {
+          showToast('Error: ' + rankData.message, { duration: 2000 });
+      }
+  })
+  .catch(error => {
+      console.error('Error in get_user_rank:', error);
+      showToast('خطا در دریافت اطلاعات رتبه کاربر.', { duration: 1000 });
+  });
+
+
+  // 2️⃣ Fetch SCOREBOARD
+  fetch(`${apiUrl}/scoreboard.php`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+  })
+  .then(response => response.json())
+  .then(scoreData => {
+      console.log("Scoreboard Data:", scoreData);
+
+      if (scoreData.status === 'success') {
+
+          let scoreboardHTML = `
+              <div class="scoreboard_box">
+                  <h3>۵ نفر برتر</h3>
+                  <ul class="scoreboard_list">
+          `;
+
+          scoreData.scoreboard.forEach((user, index) => {
+              scoreboardHTML += `
+                  <li>
+                      <span>#${index + 1}</span>
+                      <span>${user.first_name} ${user.last_name}</span>
+                      <span>امتیاز: ${user.score}</span>
+                      <span>زمان: ${user.game_duration_ms} ms</span>
+                  </li>
+              `;
+          });
+
+          scoreboardHTML += `
+                  </ul>
+              </div>
+          `;
+
+          // Add scoreboard to container
+          scoreBoardContainer.innerHTML += scoreboardHTML;
+
+      } else {
+          showToast('خطا در دریافت جدول امتیازات.', { duration: 2000 });
+      }
+  })
+  .catch(error => {
+      console.error('Error fetching scoreboard:', error);
+      showToast('خطا در دریافت جدول امتیازات.', { duration: 1000 });
+  });
 }
+
 function get_next_question(user_token) {
     hideIntroSection()
     const data = {
