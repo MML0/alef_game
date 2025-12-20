@@ -1,13 +1,9 @@
-
-
-
 @font-face {
     font-family: 'Modam';
     src: url('../fonts/Modam-Regular.ttf') format('truetype');
     font-style: normal;
     font-weight: 400;
 }
-
 /* General styling */
 body, html {
     margin: 0;
@@ -17,6 +13,109 @@ body, html {
     background-color: #f4f4f4; /* Background color */
     color: #333; /* Text color */
 }
+
+
+
+.question_container{
+    display: none;
+}
+.question_container {
+    width: 100%;
+    padding: 20px;
+    font-family: 'Tahoma', sans-serif;
+    color: #333;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.q_header_div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.q_logo_div img {
+    height: 40px;
+}
+
+.center_time_div {
+    text-align: center;
+}
+
+.timer {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.timer_text {
+    font-size: 14px;
+    color: #888;
+}
+
+.question_number_div {
+    font-size: 24px;
+    font-weight: bold;
+    color: #005c7f;
+}
+
+.line_seprator {
+    margin: 20px 0;
+    border-top: 2px solid #ddd;
+}
+
+.question_box {
+    padding: 15px;
+}
+
+.question_text_div {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.answers_div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.answer_box {
+    background-color: white;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.answer_box:hover {
+    background-color: #f1f1f1;
+}
+
+.ans_number {
+    font-size: 20px;
+    font-weight: bold;
+    color: #005c7f;
+}
+
+.answer_text {
+    font-size: 14px;
+    color: #555;
+}
+
+.footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+}
+
+.footer .text span {
+    font-weight: bold;
+    color: #005c7f;
+}
+
 #loginBtn{
     width: 100%;
 }
