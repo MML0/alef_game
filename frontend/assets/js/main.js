@@ -5,6 +5,103 @@ const apiUrl = 'http://127.0.0.1:3000/backend'; // Global URL
 
 
 
+const loaderImages = [
+    'assets/img/legacy.png',
+    'assets/img/baner.png',
+    'assets/img/BG_anaar.png',
+    'assets/img/cloud.png',
+];
+
+
+// Function to check if font is loaded
+function isFontLoaded(fontName, callback) {
+    const testElement = document.createElement('span');
+    testElement.innerText = 'dummy text';
+    
+    // Apply inline styles for positioning and visibility
+    testElement.style.fontFamily = fontName;
+    testElement.style.position = 'absolute';
+    testElement.style.visibility = 'hidden'; // Keep it hidden off-screen
+    testElement.style.fontSize = '100px'; // Increase size to ensure font loads
+    testElement.style.whiteSpace = 'nowrap'; // Prevent wrapping
+    testElement.style.padding = '0';
+    testElement.style.margin = '0';
+    testElement.style.top = '-9999px'; // Move it far off-screen
+    testElement.style.left = '-9999px'; // Move it far off-screen
+    document.body.appendChild(testElement);
+
+    const initialWidth = testElement.offsetWidth;
+
+    setTimeout(() => {
+        const newWidth = testElement.offsetWidth;
+        document.body.removeChild(testElement);  // Remove the test element
+
+        if (newWidth !== initialWidth) {
+            console.log('Font loaded!');
+            callback(true);  // Font loaded
+        } else {
+            console.log('Font not loaded yet.');
+            callback(false);  // Font not loaded
+        }
+    }, 100);  // Check after 100 ms
+}
+
+// Function to load images into the loader section and handle the loading state
+function loadImages(callback) {
+    const loaderContainer = document.createElement('div');
+    loaderContainer.id = 'loader-container';
+    document.body.appendChild(loaderContainer); // Append it to the body
+
+    let loadedImages = 0;
+    const totalImages = loaderImages.length;
+    let timeoutReached = false;
+
+    // Set a timeout to ensure the loading does not exceed 3 seconds
+    const timeout = setTimeout(() => {
+        timeoutReached = true;
+        console.log("Timeout reached, proceeding anyway.");
+        callback();  // Proceed after timeout
+    }, 3000);  // 3-second timeout
+
+    loaderImages.forEach(src => {
+        const img = new Image();  // Create a new image object
+        img.src = src;
+        img.alt = src.split('/').pop();  // Use the image file name as the alt text
+        img.style.display = 'none'; // Initially hide the images
+        img.style.width = '0'; // Set the width to 0
+        img.style.position = 'absolute'; // Hide it offscreen or in a dummy place
+        img.onload = () => {
+            loadedImages++;
+            console.log(`${img.src} loaded`);
+            if (loadedImages === totalImages && !timeoutReached) {
+                clearTimeout(timeout);  // Clear the timeout if all images are loaded
+                checkFontLoaded(callback);  // Check if the font is loaded before calling callback
+            }
+        };
+        img.onerror = () => {
+            console.error(`Failed to load image: ${src}`);
+            loadedImages++;  // Still count as loaded to proceed
+            if (loadedImages === totalImages && !timeoutReached) {
+                clearTimeout(timeout);  // Clear the timeout if all images are loaded
+                checkFontLoaded(callback);  // Check if the font is loaded before calling callback
+            }
+        };
+        loaderContainer.appendChild(img);
+    });
+}
+
+// Function to check if font is loaded before proceeding
+function checkFontLoaded(callback) {
+    isFontLoaded('Modam', (fontLoaded) => {  // Replace 'Modam' with your font name
+        if (fontLoaded) {
+            console.log('Font is loaded, proceeding...');
+            callback();  // Proceed after font is loaded
+        } else {
+            console.log('Font still not loaded, retrying...');
+            setTimeout(() => checkFontLoaded(callback), 100);  // Retry after 100ms if font isn't loaded
+        }
+    });
+}
 
 function try_to_log_in() {
     const fullName = document.getElementById('fullName').value.trim();
@@ -37,7 +134,7 @@ function try_to_log_in() {
             showToast('ورود موفقیت‌آمیز بود', { duration: 1000 });
             Loader.show()
             localStorage.setItem('user_token', data.token);
-            current_question.setItem('user_token', data.current_question);
+            localStorage.setItem('current_question', data.current_question);
             setTimeout(Loader.hide, 1900); // Show the loader after 1 second
 
             // Redirect or do something based on success
@@ -256,7 +353,7 @@ function show_login_page() {
 
 
 
-// setTimeout(Loader.show, 10); // Show the loader after 1 second
+setTimeout(Loader.show, 10); // Show the loader after 1 second
 
 document.addEventListener("DOMContentLoaded", function () {
     const continueBtn = document.getElementById('continueBtn');
@@ -273,18 +370,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
+    const token = localStorage.getItem('user_token');
 
-    // Show loader, then hide it after 3 seconds
-    // setTimeout(Loader.hide, 1500); // Hide the loader after 4 seconds
+    if (token) {
+        console.log("User token found:", token);
+        setTimeout(Loader.hide, 1500); 
+        setTimeout(showIntroSection, 2500); // remove this 
+        // skip the intro jump to next question 
 
-    // // After the loader hides, show the story section with animations
-    // setTimeout(showStorySection, 1500);  // took 3 sec // Adjust to fit loader hide time
-
-    // Hide the intro section after 5 seconds for demonstration
-    // setTimeout(showIntroSection, 5500);
-    setTimeout(showIntroSection, 100);
-    // // //  setTimeout(hideIntroSection, 5000);
-
+    } else {
+        console.log("No user token found.");
+        loadImages(() => {
+          setTimeout(Loader.hide, 800); 
+          setTimeout(showStorySection, 800);  // took 3 sec // Adjust to fit loader hide time
+          setTimeout(showIntroSection, 4500);// Show story section after loader animation ends
+        });
+}
 
 
     document.getElementById('phoneNumber').addEventListener('input', function() {

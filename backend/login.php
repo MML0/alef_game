@@ -12,7 +12,6 @@ function loginUser($phone_number) {
     $stmt = $pdo->prepare("SELECT * FROM users WHERE phone_number = ?");
     $stmt->execute([$phone_number]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
     if ($user) {
         // Generate a unique token
         $token = bin2hex(random_bytes(16));
@@ -20,7 +19,6 @@ function loginUser($phone_number) {
         // Update the token in the database
         $update_stmt = $pdo->prepare("UPDATE users SET token = ? WHERE id = ?");
         $update_stmt->execute([$token, $user['id']]);
-        
         // If the game has not started, set it to ongoing
         if ($user['game_status'] == 'not_started') {
             $update_game_stmt = $pdo->prepare("UPDATE users SET game_status = 'ongoing' WHERE id = ?");
