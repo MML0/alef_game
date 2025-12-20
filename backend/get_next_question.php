@@ -41,7 +41,7 @@ function getNextQuestion($user_token) {
                 $current_question = $user['current_question'];
                 if ($user['game_status'] == 'not_started') {
                     // Set the game status to 'ongoing' and set the start_game_time timestamp
-                    $update_game_status_stmt = $pdo->prepare("UPDATE users SET game_status = 'ongoing', start_game_time = CURRENT_TIMESTAMP WHERE id = ?");
+                    $update_game_status_stmt = $pdo->prepare("UPDATE users SET game_status = 'ongoing', start_game_time = CURRENT_TIMESTAMP(3) WHERE id = ?");
                     $update_game_status_stmt->execute([$user['id']]);
                 }
 
@@ -90,7 +90,7 @@ function getNextQuestion($user_token) {
                 } else {
                     if ($user['game_status'] == 'ongoing') {
                         // Set the game status to 'ongoing' and set the end_game_time timestamp
-                        $update_game_status_stmt = $pdo->prepare("UPDATE users SET game_status = 'ongoing', end_game_time = CURRENT_TIMESTAMP WHERE id = ?");
+                        $update_game_status_stmt = $pdo->prepare("UPDATE users SET game_status = 'ongoing', end_game_time = CURRENT_TIMESTAMP(3) WHERE id = ?");
                         $update_game_status_stmt->execute([$user['id']]);
                     }
                     // If there are no more questions

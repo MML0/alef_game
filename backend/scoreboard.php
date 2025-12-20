@@ -14,17 +14,22 @@ function getScoreBoard() {
         SELECT u.id, u.first_name, u.last_name, u.score, u.start_game_time, u.end_game_time,
             -- If the game is not finished, calculate game duration based on current time
             CASE
-                WHEN u.end_game_time IS NULL THEN TIMESTAMPDIFF(SECOND, u.start_game_time, CURRENT_TIMESTAMP)
-                ELSE TIMESTAMPDIFF(SECOND, u.start_game_time, u.end_game_time)
-            END AS game_duration
+                WHEN u.end_game_time IS NULL THEN TIMESTAMPDIFF(MICROSECOND, u.start_game_time, NOW(3))
+                ELSE TIMESTAMPDIFF(MICROSECOND, u.start_game_time, u.end_game_time)
+            END AS game_duration_microseconds
         FROM users u
         WHERE u.game_status = 'completed' OR u.game_status = 'ongoing'  -- Include users who finished or are still playing
-        ORDER BY u.score DESC, game_duration ASC
+        ORDER BY u.score DESC, game_duration_microseconds ASC
         LIMIT 5
     ");
     $stmt->execute();
 
     $scoreBoard = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Convert game_duration_microseconds to milliseconds
+    foreach ($scoreBoard as &$user) {
+        $user['game_duration_ms'] = $user['game_duration_microseconds'] / 1000;  // Convert to milliseconds
+    }
 
     return [
         'status' => 'success',

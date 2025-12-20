@@ -26,8 +26,8 @@ function createTables($fresh) {
                 score INT DEFAULT 0,
                 current_question INT DEFAULT 1,
                 start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                start_game_time TIMESTAMP NULL,  
-                end_game_time TIMESTAMP NULL,    
+                start_game_time DATETIME(3) NULL,  
+                end_game_time DATETIME(3) NULL,    
                 game_status ENUM('not_started', 'ongoing', 'completed') DEFAULT 'not_started',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );

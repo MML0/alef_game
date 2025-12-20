@@ -22,7 +22,9 @@ body, html {
 }
 
 
-
+.score_board_container{
+    display: none;
+}
 .question_container {
     display: none;
     transition: opacity 0.4s ease-in-out;
@@ -33,7 +35,6 @@ body, html {
     background-color: #f7f7f7;
     border-radius: 8px;
 }
-
 .q_header_div {
     display: flex;
     align-items: center;
@@ -41,15 +42,12 @@ body, html {
     flex-direction: row-reverse;
     padding: 25px 25px 10px 25px;
 }
-
 .q_logo_div img {
     height: 40px;
 }
-
 .center_time_div {
     text-align: center;
 }
-
 .timer {
     font-size: 22px;
     font-weight: bold;
@@ -84,20 +82,16 @@ body, html {
     justify-content: center;
     align-items: center;
 }
-
-
 .line_seprator {
     margin: 5px auto;
     border-top: 2px solid #ddd;
     width: 90%;
 }
-
 .question_box {
     padding: 15px;
     max-width: 600px;
     margin: auto;
 }
-
 .question_text_div {
     font-size: 18px;
     font-weight: bold;
@@ -120,7 +114,6 @@ body, html {
     grid-template-columns: 4fr;
     gap: 10px;
 }
-
 .answer_box {
     display: flex;
     background-color: white;
@@ -134,7 +127,6 @@ body, html {
     justify-content: flex-start;
     height: 80px;
 }
-
 .ans_number {
     border: 1px solid #D0D1D3;
     margin: 0px;
@@ -150,7 +142,6 @@ body, html {
     align-items: center;
     width: 20px;
 }
-
 .answer_text {
     border: 1px solid #D0D1D3;
     font-size: 18px;
@@ -164,9 +155,6 @@ body, html {
     align-items: center;
     width: 100%;
 }
-
-
-
 #loginBtn{
     width: 100%;
 }
