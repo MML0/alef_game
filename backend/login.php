@@ -20,10 +20,10 @@ function loginUser($phone_number) {
         $update_stmt = $pdo->prepare("UPDATE users SET token = ? WHERE id = ?");
         $update_stmt->execute([$token, $user['id']]);
         // If the game has not started, set it to ongoing
-        if ($user['game_status'] == 'not_started') {
-            $update_game_stmt = $pdo->prepare("UPDATE users SET game_status = 'ongoing' WHERE id = ?");
-            $update_game_stmt->execute([$user['id']]);
-        }
+        // if ($user['game_status'] == 'not_started') {
+        //     $update_game_stmt = $pdo->prepare("UPDATE users SET game_status = 'ongoing' WHERE id = ?");
+        //     $update_game_stmt->execute([$user['id']]);
+        // }
         
         // Get the current question from the user's data
         $current_question = $user['current_question'];
@@ -37,7 +37,6 @@ function loginUser($phone_number) {
             'last_name' => $user['last_name'], 
             'token' => $token,
             'current_question' => $current_question,
-
         ];
     } else {
         return ['status' => 'error', 'message' => 'User not found'];

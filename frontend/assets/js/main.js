@@ -7,7 +7,50 @@ const loaderImages = [
     'assets/img/BG_anaar.png',
     'assets/img/cloud.png',
 ];
+document.addEventListener("DOMContentLoaded", function () {
+    const continueBtn = document.getElementById('continueBtn');
+    //  همکار عزیز، 
+    continueBtn.addEventListener('click', function() {
+        continueBtn.disabled = true;  // Disables the button
+        Loader.show()
+        check_is_game_ready()
+        setTimeout(Loader.hide, 900); // Show the loader after 1 second
+        setTimeout(() => {
+            continueBtn.disabled = false;  
+        }, 900);
+    });
 
+
+    const token = localStorage.getItem('user_token');
+
+    if (token) {
+        console.log("User token found:", token);
+        setTimeout(Loader.hide, 1500); 
+        // setTimeout(showIntroSection, 2500); // remove this 
+        // skip the intro jump to next question 
+        get_next_question(token)
+
+    } else {
+        console.log("No user token found.");
+        loadImages(() => {
+          setTimeout(Loader.hide, 800); 
+          setTimeout(showStorySection, 800);  // legecy took 3 sec // Adjust to fit loader hide time
+          setTimeout(showIntroSection, 4500);// Show rules section after loader animation ends
+        });
+}
+
+
+    document.getElementById('phoneNumber').addEventListener('input', function() {
+    const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    this.value = this.value.replace(/[0-9]/g, function(match) {
+        return persianNumbers[parseInt(match)];
+    });
+    });
+
+});
+function name(params) {
+  
+}
 function get_next_question(user_token) {
     hideIntroSection()
     const data = {
@@ -31,7 +74,11 @@ function get_next_question(user_token) {
                 show_score_board(data.score);
             } else {
                 // Otherwise, show the next question
-                show_question(data.current_question, data.question_text, data.answers);
+                if (data.remaining_seconds==0){
+                    showToast('times up', { duration: 2000 });
+                    show_score_board(data.score);
+                }
+                show_question(data.current_question, data.question_text, data.answers,data.remaining_seconds);
             }
         } else {
             // Handle specific error messages from the backend
@@ -50,10 +97,105 @@ function get_next_question(user_token) {
         showToast('خطا در ارتباط با سرور.', { duration: 1000 });
     });
 }
+let remaining_sec = 60*10 ;
 
-function show_question(current_number,question_text,answers) {
+function show_question(current_number,question_text,answers,remaining_seconds) {
+  document.getElementById('question_container').style.display = 'block';
+  setTimeout(() => {document.getElementById('question_container').style.opacity = 1;  }, 200);
+  // resetTimer()
+  document.getElementById('question_text_p').textContent = question_text;
+  document.querySelector('.question_number_p').textContent = convertToPersian(current_number.toString());            
+  document.getElementById('answer_text1').textContent = answers[0];
+
+  console.log(current_number,question_text,answers) ;
+  startTimer(remaining_seconds)
+  
+  // setTimeout(() => {
+  //   startTimer(10*60)
+  // }, 400);
 
 }
+
+
+// Function to convert English numbers to Persian
+function convertToPersian(number) {
+    const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return number.toString().replace(/[0-9]/g, (digit) => persianDigits[digit]);
+}
+let minutes = 0;
+let seconds = 0;
+let hundredths = 0;
+let startTime = 0; // Stores the timestamp when the timer starts
+let timerInterval = null;  // To store the interval ID
+
+
+// Update the timer on the screen
+function updateTimer() {
+    document.querySelector('.min').textContent = convertToPersian(minutes);
+    document.querySelector('.sec').textContent = convertToPersian(seconds.toString().padStart(2, '0'));
+    document.querySelector('.th100').textContent = convertToPersian(hundredths.toString().padStart(2, '0'));
+}
+
+
+// Convert total seconds into minutes, seconds, and hundredths
+function convertTime(totalSeconds) {
+    minutes = Math.floor(totalSeconds / 60);
+    seconds = totalSeconds % 60;
+    hundredths = 0; // Reset hundredths at the start
+    updateTimer();
+}
+
+// Start the countdown timer with dynamic starting time (in seconds)
+function startTimer(startingSeconds) {
+    if (timerInterval !== null) return;  // Check if the timer is already running
+
+    // Record the start time using performance.now() for better accuracy
+    startTime = performance.now();
+
+    // Set the initial timer values based on the starting seconds
+    convertTime(startingSeconds);
+
+    // Update the timer based on real elapsed time
+    timerInterval = setInterval(() => {
+        const elapsedTime = performance.now() - startTime;  // Elapsed time in milliseconds
+        const elapsedSeconds = Math.floor(elapsedTime / 1000);  // Convert milliseconds to seconds
+
+        let totalSeconds = startingSeconds - elapsedSeconds;  // Subtract elapsed time from total time
+
+        if (totalSeconds <= 0) {
+            totalSeconds = 0;  // Ensure it doesn't go below zero
+            stopTimer();  // Stop the timer when time reaches zero
+            setTimeout(() => { document.querySelector('.th100').textContent = convertToPersian('00'); }, 100);
+        }
+
+        // Calculate minutes, seconds, and hundredths
+        minutes = Math.floor(totalSeconds / 60);
+        seconds = totalSeconds % 60;
+        hundredths = Math.floor((elapsedTime % 1000) / 10); // Show hundredths of a second
+
+        updateTimer();
+    }, 10); // Update every 10 milliseconds to display hundredths
+}
+
+
+// Stop the countdown timer
+function stopTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+}
+
+// Reset the countdown timer to initial values
+function resetTimer() {
+    minutes = 10;
+    seconds = 0;
+    hundredths = 0;
+    stopTimer();  // Stop the timer when reset
+    updateTimer();
+    stopTimer();  // Stop the timer when reset
+}
+
+
+
 // Function to load images into the loader section and handle the loading state
 function loadImages(callback) {
     const loaderContainer = document.createElement('div');
@@ -154,7 +296,7 @@ function try_to_log_in() {
             localStorage.setItem('user_token', data.token);
             localStorage.setItem('current_question', data.current_question);
             get_next_question(data.token);
-            setTimeout(Loader.hide, 1900); // Show the loader after 1 second
+            setTimeout(Loader.hide, 2000); // Show the loader after 1 second
             // Redirect or do something based on success
         } else {
             // Handle specific error messages from the backend
@@ -414,44 +556,3 @@ function check_is_game_ready() {
 }
 setTimeout(Loader.show, 10); // Show the loader after 1 second
 
-document.addEventListener("DOMContentLoaded", function () {
-    const continueBtn = document.getElementById('continueBtn');
-    //  همکار عزیز، 
-    continueBtn.addEventListener('click', function() {
-        continueBtn.disabled = true;  // Disables the button
-        Loader.show()
-        check_is_game_ready()
-        setTimeout(Loader.hide, 900); // Show the loader after 1 second
-        setTimeout(() => {
-            continueBtn.disabled = false;  
-        }, 900);
-    });
-
-
-    const token = localStorage.getItem('user_token');
-
-    if (token) {
-        console.log("User token found:", token);
-        setTimeout(Loader.hide, 1500); 
-        // setTimeout(showIntroSection, 2500); // remove this 
-        // skip the intro jump to next question 
-        get_next_question(token)
-
-    } else {
-        console.log("No user token found.");
-        loadImages(() => {
-          setTimeout(Loader.hide, 800); 
-          setTimeout(showStorySection, 800);  // legecy took 3 sec // Adjust to fit loader hide time
-          setTimeout(showIntroSection, 4500);// Show rules section after loader animation ends
-        });
-}
-
-
-    document.getElementById('phoneNumber').addEventListener('input', function() {
-    const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-    this.value = this.value.replace(/[0-9]/g, function(match) {
-        return persianNumbers[parseInt(match)];
-    });
-    });
-
-});

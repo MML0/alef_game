@@ -48,7 +48,7 @@
 
         <div id="intro_page2" class="intro_text_div">
             <form id="challengeForm"  onsubmit="validatePhoneNumber(event)">
-                <p class="bold">برای شروع مسابقه، لطفاً نام کامل و شماره همراهت رو وارد کن.</p>
+                <p class="bold">برای شروع مسابقه، نام کامل و شماره تلفن همراهت رو وارد کن.</p>
                 <p ><span class="bold">نکته مهم:</span> توی این چالش، باید با محدودیت زمانی ۱۰ دقیقه، به ۱۰ سوال پاسخ بدی. برنده کسایی هستن که در مدت زمان کمتر، پاسخ های صحیح بیشتری داشته باشن.</p>
 
                 <label for="fullName">نام کامل</label>
@@ -71,33 +71,50 @@
             <p class="text">Powered by <span>Alef Formation</span></p>
         </div>
     </div>
-    <div class="question_container">
-        <div class="q_header_div">
-            <div class="q_logo_div"><img src="assets/img/alef_logo.png" alt="alef_logo" /></div>
-            <div class="center_time_div">
-                <div class="timer">
-                    <p class="min">10</p>:
-                    <p class="sec">00</p>:
-                    <p class="th100">00</p>
-                </div>
-                <p class="timer_text">زمان باقی مانده</p>
-            </div>
-            <div class="question_number_div"><p class="question_number_p"></p></div>
+<div class="question_container" id="question_container">
+    <div class="q_header_div">
+        <div class="q_logo_div">
+            <img src="assets/img/alef_logo.png" alt="alef_logo" />
         </div>
-        <div class="line_seprator"></div>
-        <div class="question_box">
-            <div class="question_text_div"><p class="question_text"></p></div>
-            <div class="answers_div">
-                <button class="answer_box answer1"><p class="ans_number"></p><p class="answer_text" id="answer_text1"></p></button>
-                <button class="answer_box answer2"><p class="ans_number"></p><p class="answer_text" id="answer_text2"></p></button>
-                <button class="answer_box answer3"><p class="ans_number"></p><p class="answer_text" id="answer_text3"></p></button>
-                <button class="answer_box answer4"><p class="ans_number"></p><p class="answer_text" id="answer_text4"></p></button>
+        <div class="center_time_div">
+            <div class="timer">
+                <p class="min">۱۰</p>:<p class="sec">۰۰</p>:<p class="th100">۰۰</p>
             </div>
+            <p class="timer_text">زمان باقی مانده</p>
         </div>
+        <div class="question_number_div">
+            <p class="question_number_p">۱</p>
+        </div>
+    </div>
+    <div class="line_seprator"></div>
+    <div class="question_box">
+        <div class="question_text_div">
+            <p class="question_text" id="question_text_p">بر اساس متن کتاب الف «داستان برند الف» بیشتر به چه چیزی اشاره دارد؟</p>
+        </div>
+        <div class="answers_div">
+            <button class="answer_box answer1">
+                <p class="ans_number">۱</p>
+                <p class="answer_text" id="answer_text1">معرفی مسیر wedwedwed و موفقیت‌ها</p>
+            </button>
+            <button class="answer_box answer2">
+                <p class="ans_number">۲</p>
+                <p class="answer_text" id="answer_text2">روایتی روشن، انسانی و ریشه‌دار در زندگی واقعی</p>
+            </button>
+            <button class="answer_box answer3">
+                <p class="ans_number">۳</p>
+                <p class="answer_text" id="answer_text3">داستانی که با "یک بود یکی نبود" شروع می‌شود!</p>
+            </button>
+            <button class="answer_box answer4">
+                <p class="ans_number">۴</p>
+                <p class="answer_text" id="answer_text4">داستانی که با "یک بود یکی نبود" شروع می‌شود!</p>
+            </button>
+        </div>
+    </div>
     <div class="footer">
         <p class="text">Powered by <span>Alef Formation</span></p>
     </div>
-    </div>
+</div>
+
     <script src="assets/js/main.js?v=0.2"></script>
 </body>
 </html>

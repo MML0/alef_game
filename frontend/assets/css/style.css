@@ -20,19 +20,21 @@ body, html {
     display: none;
 }
 .question_container {
+    transition: opacity 0.4s ease-in-out;
     width: 100%;
-    padding: 20px;
+    opacity: 0;
     font-family: 'Tahoma', sans-serif;
     color: #333;
     background-color: #f7f7f7;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .q_header_div {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-direction: row-reverse;
+    padding: 25px 25px 10px 25px;
 }
 
 .q_logo_div img {
@@ -44,23 +46,38 @@ body, html {
 }
 
 .timer {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    line-height: 0px;
+    flex-direction: row-reverse;
+    height: 30px;
+    color: #15354E;
 }
 
 .timer_text {
     font-size: 14px;
-    color: #888;
+    color: #312F30;
+    font-family: 'Modam', sans-serif;  
+    margin: 5px;
 }
 
 .question_number_div {
-    font-size: 24px;
+font-size: 24px;
     font-weight: bold;
     color: #005c7f;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    border: 1px #E0E0E0 solid;
+    justify-content: center;
+    align-items: center;
 }
 
+
 .line_seprator {
-    margin: 20px 0;
+    margin: 5px 0;
     border-top: 2px solid #ddd;
 }
 
@@ -73,7 +90,18 @@ body, html {
     font-weight: bold;
     margin-bottom: 15px;
 }
-
+.question_text{
+    margin-top: 5px;
+    margin-bottom: 30px;
+    padding: 5px 15px;
+    color: #000000;
+    font-family: 'Modam', sans-serif;
+    border-right: 4px solid #AF4122;
+    display: flex;
+    align-items: center;
+    height: 45px;
+    font-size: 20px;
+}
 .answers_div {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -104,17 +132,7 @@ body, html {
     color: #555;
 }
 
-.footer {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 12px;
-    color: #888;
-}
 
-.footer .text span {
-    font-weight: bold;
-    color: #005c7f;
-}
 
 #loginBtn{
     width: 100%;
@@ -311,7 +329,7 @@ label, input {
     margin-bottom: 20px;
     margin-top: 36vh;
     max-width: 370px;
-    background-color: #02546d00;
+    background-color: #15354E00;
 }
 
 .intro_text_div .intro_title {
@@ -362,7 +380,7 @@ label, input {
     font-family: 'Modam', sans-serif;
     padding: 10px 20px;
     font-size: 1rem;
-    background-color: #02546D; /* Adjust as per theme */
+    background-color: #15354E; /* Adjust as per theme */
     color: #FFFFFF;
     border: 1px solid #6E8496;
     cursor: pointer;
@@ -373,22 +391,23 @@ label, input {
 
 /* Footer styling */
 .footer {
+    font-family: 'Modam', sans-serif;
     position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #ffffff00;
-    color: rgb(0, 0, 0);
-    text-align: center;
-    padding: 0px;
+    bottom: 0 !important;
+    width: 100% !important;
+    background-color: #ffffff00 !important;
+    color: rgb(0, 0, 0) !important;
+    text-align: center !important;
+    padding: 0px !important;
 }
 
 .footer .text {
-    font-size: 12px;
+    font-size: 12px !important;
 }
 
 .footer span {
-    font-weight: bold;
-    font-size: 13px;
+    font-weight: bold !important;
+    font-size: 13px !important;
 }
 
 

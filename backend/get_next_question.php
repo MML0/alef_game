@@ -39,6 +39,11 @@ function getNextQuestion($user_token) {
             if ($game_status['game_status'] == 'ongoing') {
                 // Get the current question number
                 $current_question = $user['current_question'];
+                if ($user['game_status'] == 'not_started') {
+                    // Set the game status to 'ongoing' and set the start_game_time timestamp
+                    $update_game_status_stmt = $pdo->prepare("UPDATE users SET game_status = 'ongoing', start_game_time = CURRENT_TIMESTAMP WHERE id = ?");
+                    $update_game_status_stmt->execute([$user['id']]);
+                }
 
                 // Get the next question from the database
                 $next_question_stmt = $pdo->prepare("SELECT * FROM questions WHERE id = ?");
@@ -46,10 +51,29 @@ function getNextQuestion($user_token) {
                 $next_question = $next_question_stmt->fetch(PDO::FETCH_ASSOC);
 
                 if ($next_question) {
-                    // Update the user's current question in the database
-                    // $update_stmt = $pdo->prepare("UPDATE users SET current_question = ? WHERE id = ?");
-                    // $update_stmt->execute([$current_question + 1, $user['id']]);
+                    // Set the max time (10 minutes + 5 seconds = 605 seconds)
+                    $max_time_seconds = 600; // 10 minutes in seconds
+                    // Query to fetch the current time and start time from MySQL and calculate the remaining time
+                    $stmt = $pdo->prepare("
+                        SELECT TIMESTAMPDIFF(SECOND, start_game_time, CURRENT_TIMESTAMP) AS elapsed_time
+                        FROM users WHERE id = ?
+                    ");
+                    $stmt->execute([$user['id']]);
+                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
+                    if ($result) {
+                        $elapsed_time = $result['elapsed_time'];
+                        $remaining_time = $max_time_seconds - $elapsed_time;
+
+                        // Ensure remaining time does not go below zero
+                        if ($remaining_time < 0) {
+                            $remaining_time = 0;
+                        }
+                    }
+                    // Ensure remaining time does not go below zero
+                    if ($remaining_time < 0) {
+                        $remaining_time = 0;
+                    }
                     return [
                         'status' => 'success',
                         'current_question' => $current_question ,
@@ -59,7 +83,9 @@ function getNextQuestion($user_token) {
                             $next_question['answer_2'],
                             $next_question['answer_3'],
                             $next_question['answer_4']
-                        ]
+                        ],
+                        'remaining_seconds' => $remaining_time,
+                        'score' => $user['score'],
                     ];
                 } else {
                     // If there are no more questions
