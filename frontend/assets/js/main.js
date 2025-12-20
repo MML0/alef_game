@@ -9,7 +9,7 @@ const loaderImages = [
 ];
 
 function get_next_question(user_token) {
-
+    hideIntroSection()
     const data = {
         token: user_token,
     };
@@ -36,9 +36,10 @@ function get_next_question(user_token) {
         } else {
             // Handle specific error messages from the backend
             if (data.message === 'game not started') {
-                showToast('لطفاً منتظر بمانید تا بازی شروع شود.', { duration: 1000 });
+                showToast('لطفاً منتظر بمانید تا بازی شروع شود.', { duration: 2000 });
             } else {
                 // General error message for other cases
+                setTimeout(showIntroSection, 1500);
                 showToast('ورود ناموفق. لطفاً دوباره تلاش کنید.', { duration: 1000 });
             }
         }

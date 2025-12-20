@@ -15,8 +15,7 @@ function getNextQuestion($user_token) {
     
     if ($user) {
         // Get the game status from the game_stats table
-        $game_status_stmt = $pdo->prepare("SELECT * FROM game_stats WHERE user_id = ?");
-        $game_status_stmt->execute([$user['id']]);
+        $game_status_stmt = $pdo->query("SELECT * FROM game_stats LIMIT 1");
         $game_status = $game_status_stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($game_status) {
@@ -43,17 +42,17 @@ function getNextQuestion($user_token) {
 
                 // Get the next question from the database
                 $next_question_stmt = $pdo->prepare("SELECT * FROM questions WHERE id = ?");
-                $next_question_stmt->execute([$current_question + 1]);
+                $next_question_stmt->execute([$current_question]);
                 $next_question = $next_question_stmt->fetch(PDO::FETCH_ASSOC);
 
                 if ($next_question) {
                     // Update the user's current question in the database
-                    $update_stmt = $pdo->prepare("UPDATE users SET current_question = ? WHERE id = ?");
-                    $update_stmt->execute([$current_question + 1, $user['id']]);
+                    // $update_stmt = $pdo->prepare("UPDATE users SET current_question = ? WHERE id = ?");
+                    // $update_stmt->execute([$current_question + 1, $user['id']]);
 
                     return [
                         'status' => 'success',
-                        'current_question' => $current_question + 1,
+                        'current_question' => $current_question ,
                         'question_text' => $next_question['question_text'],
                         'answers' => [
                             $next_question['answer_1'],
