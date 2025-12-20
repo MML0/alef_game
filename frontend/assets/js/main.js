@@ -9,7 +9,7 @@ const loaderImages = [
 ];
 document.addEventListener("DOMContentLoaded", function () {
     const continueBtn = document.getElementById('continueBtn');
-    //  همکار عزیز، 
+    //  همکار عزیز، skip
     continueBtn.addEventListener('click', function() {
         continueBtn.disabled = true;  // Disables the button
         Loader.show()
@@ -39,6 +39,83 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 }
 
+    // Get all the answer buttons
+    const answerButtons = document.querySelectorAll('.answer_box');
+
+    answerButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            answerButtons.forEach(button => button.disabled = true);
+            const index = this.getAttribute('index');
+
+            answerButtons.forEach(button => {
+                const answernum = button.querySelector('.ans_number');
+                const answerText = button.querySelector('.answer_text');
+                if (button.getAttribute('index') === index) {
+                    // Selected answer
+                    answerText.style.backgroundColor = '#15354E';
+                    answerText.style.color = '#FFFFFF';
+                } else {
+                    // Unselected answers
+                    answernum.style.color = '#D0D1D3';
+                    answerText.style.color = '#D0D1D3';
+                }
+            });
+            questionNumber = document.querySelector('.question_text_div').getAttribute('question_number');
+            const data = {
+                token: token,          
+                answer: index,          
+                question_id: questionNumber
+            };
+            fetch(`${apiUrl}/choose_answer.php`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data), // Ensure you are sending this as a JSON string
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the received data
+                if (data.status === 'success') {
+                    // Show feedback based on the answer
+                    if (data.correct === true) {
+                        showToast('Correct', { duration: 2000 });
+                        setTimeout(() => {
+                            get_next_question(token)
+                        }, 2000);
+
+                        answerButtons.forEach(button => {
+                            const answernum = button.querySelector('.ans_number');
+                            const answerText = button.querySelector('.answer_text');
+                            if (button.getAttribute('index') === index) {
+                                // Selected answer
+                                answerText.style.backgroundColor = '#AF4122';
+                                answerText.style.color = '#FFFFFF';
+                            } 
+                            if (button.getAttribute('index') == data.correct_answer_num) {
+                                // Unselected answers
+                                answernum.style.color = '#709E92';
+                                answerText.style.color = '#D0D1D3';
+                            }
+                        });
+                    } 
+                } else {
+                    if (data.message == 'Time is up') {
+                        showToast('Time is up', { duration: 2000 });
+                        show_score_board();
+                    } else if(data.message == 'You already answered this question') {
+                        showToast('You already answered this question', { duration: 2000 });
+                        get_next_question(token)
+                    }
+                }
+            })
+            .catch(error => {
+                // Handle any error
+                console.error('Error:', error);
+                showToast('خطا در ارتباط با سرور.', { duration: 1000 });
+            });
+        });
+    });
 
     document.getElementById('phoneNumber').addEventListener('input', function() {
     const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -105,30 +182,28 @@ function show_question(current_number,question_text,answers,remaining_seconds) {
   setTimeout(() => {document.getElementById('question_container').style.opacity = 1;  }, 200);
   // resetTimer()
   document.getElementById('question_text_p').textContent = question_text;
-  document.querySelector('.question_number_p').textContent = convertToPersian(current_number.toString());            
   document.getElementById('answer_text1').textContent = answers[0];
-
+  document.getElementById('answer_text2').textContent = answers[1];
+  document.getElementById('answer_text3').textContent = answers[2];
+  document.getElementById('answer_text4').textContent = answers[3];
+  document.querySelector('.question_number_p').textContent = convertToPersian(current_number.toString());            
+  document.querySelector('.question_text_div').setAttribute('question_number',current_number.toString());
   console.log(current_number,question_text,answers) ;
   startTimer(remaining_seconds)
   
-  // setTimeout(() => {
-  //   startTimer(10*60)
-  // }, 400);
-
 }
-
 
 // Function to convert English numbers to Persian
 function convertToPersian(number) {
     const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     return number.toString().replace(/[0-9]/g, (digit) => persianDigits[digit]);
 }
+
 let minutes = 0;
 let seconds = 0;
 let hundredths = 0;
 let startTime = 0; // Stores the timestamp when the timer starts
 let timerInterval = null;  // To store the interval ID
-
 
 // Update the timer on the screen
 function updateTimer() {
@@ -136,8 +211,6 @@ function updateTimer() {
     document.querySelector('.sec').textContent = convertToPersian(seconds.toString().padStart(2, '0'));
     document.querySelector('.th100').textContent = convertToPersian(hundredths.toString().padStart(2, '0'));
 }
-
-
 // Convert total seconds into minutes, seconds, and hundredths
 function convertTime(totalSeconds) {
     minutes = Math.floor(totalSeconds / 60);
@@ -145,7 +218,6 @@ function convertTime(totalSeconds) {
     hundredths = 0; // Reset hundredths at the start
     updateTimer();
 }
-
 // Start the countdown timer with dynamic starting time (in seconds)
 function startTimer(startingSeconds) {
     if (timerInterval !== null) return;  // Check if the timer is already running
@@ -177,14 +249,11 @@ function startTimer(startingSeconds) {
         updateTimer();
     }, 10); // Update every 10 milliseconds to display hundredths
 }
-
-
 // Stop the countdown timer
 function stopTimer() {
     clearInterval(timerInterval);
     timerInterval = null;
 }
-
 // Reset the countdown timer to initial values
 function resetTimer() {
     minutes = 10;
@@ -194,9 +263,6 @@ function resetTimer() {
     updateTimer();
     stopTimer();  // Stop the timer when reset
 }
-
-
-
 // Function to load images into the loader section and handle the loading state
 function loadImages(callback) {
     const loaderContainer = document.createElement('div');
