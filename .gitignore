@@ -1,2 +1,4 @@
 frontend/assets/fonts/*
 backend/db.php
+backend/users.csv
+backend/users.xlsx

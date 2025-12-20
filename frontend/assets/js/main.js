@@ -1,4 +1,4 @@
-const apiUrl = 'https://your-api-url.com'; // Global URL
+const apiUrl = 'http://127.0.0.1:3000/backend'; // Global URL
 
 
 
@@ -19,7 +19,7 @@ function try_to_log_in() {
     const data = {
         action: 'login',  // Action for login
         name: fullName,
-        phone: phoneNumber
+        phone_number: convertPersianToArabic(phoneNumber) // Ensure this is the correct phone number format
     };
 
     // Make the POST request
@@ -28,17 +28,29 @@ function try_to_log_in() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data), // Ensure you are sending this as a JSON string
     })
     .then(response => response.json())
     .then(data => {
         // Handle the received data
-        if (data.success) {
+        if (data.status === 'success') {
             showToast('ورود موفقیت‌آمیز بود', { duration: 1000 });
+            Loader.show()
+            localStorage.setItem('user_token', data.token);
+            current_question.setItem('user_token', data.current_question);
+            setTimeout(Loader.hide, 1900); // Show the loader after 1 second
+
             // Redirect or do something based on success
         } else {
-            showToast('ورود ناموفق. لطفاً دوباره تلاش کنید.', { duration: 1000 });
-
+            // Handle specific error messages from the backend
+            if (data.message === 'Phone number is required') {
+                showToast('شماره تلفن الزامی است.', { duration: 1000 });
+            } else if (data.message === 'User not found') {
+                showToast('شماره تلفن یافت نشد.', { duration: 1000 });
+            } else {
+                // General error message for other cases
+                showToast('ورود ناموفق. لطفاً دوباره تلاش کنید.', { duration: 1000 });
+            }
         }
     })
     .catch(error => {
@@ -46,6 +58,7 @@ function try_to_log_in() {
         console.error('Error:', error);
         showToast('خطا در ارتباط با سرور.', { duration: 1000 });
     });
+
 }
 
 // Toast utility
