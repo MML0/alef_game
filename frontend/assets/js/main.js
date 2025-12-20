@@ -1,5 +1,5 @@
 const apiUrl = 'http://127.0.0.1:3000/backend'; // Global URL
-
+let token ;
 
 const loaderImages = [
     'assets/img/legacy.png',
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    const token = localStorage.getItem('user_token');
+    token = localStorage.getItem('user_token');
 
     if (token) {
         console.log("User token found:", token);
@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
             questionNumber = document.querySelector('.question_text_div').getAttribute('question_number');
+            token = localStorage.getItem('user_token');
             const data = {
                 token: token,          
                 answer: index,          
@@ -87,18 +88,31 @@ document.addEventListener("DOMContentLoaded", function () {
                         answerButtons.forEach(button => {
                             const answernum = button.querySelector('.ans_number');
                             const answerText = button.querySelector('.answer_text');
-                            if (button.getAttribute('index') === index) {
+                            if (button.getAttribute('index') == data.correct_answer_num) {
                                 // Selected answer
-                                answerText.style.backgroundColor = '#AF4122';
+                                answerText.style.backgroundColor = '#22af40ff';
                                 answerText.style.color = '#FFFFFF';
                             } 
-                            if (button.getAttribute('index') == data.correct_answer_num) {
-                                // Unselected answers
-                                answernum.style.color = '#709E92';
-                                answerText.style.color = '#D0D1D3';
-                            }
+                          });
+                    } else{
+                        setTimeout(() => {
+                            get_next_question(token)
+                        }, 2000);
+                        answerButtons.forEach(button => {
+                          const answernum = button.querySelector('.ans_number');
+                          const answerText = button.querySelector('.answer_text');
+                          if (button.getAttribute('index') === index) {
+                              // Selected answer
+                              answerText.style.backgroundColor = '#AF4122';
+                              answerText.style.color = '#FFFFFF';
+                          } 
+                          if (button.getAttribute('index') == data.correct_answer_num) {
+                              // Unselected answers
+                              answerText.style.backgroundColor = '#569f8cff';
+                              answerText.style.color = '#D0D1D3';
+                          }
                         });
-                    } 
+                    }
                 } else {
                     if (data.message == 'Time is up') {
                         showToast('Time is up', { duration: 2000 });
@@ -125,8 +139,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-function show_score_board (score) {
-  console.log(score);
+function show_score_board () {
+  console.log('show score');
+  stopTimer()
+  Loader.show()
+  setTimeout(() => {
+    document.getElementById('question_container').style.display = 'none';
+    setTimeout(() => {
+      Loader.hide()
+    }, 400);
+  }, 400);
+
+
 }
 function get_next_question(user_token) {
     hideIntroSection()
@@ -146,24 +170,22 @@ function get_next_question(user_token) {
     .then(data => {
         // Handle the received data
         if (data.status === 'success') {
-            if (data.message === 'all questions answered') {
-                // Show the score board if all questions are answered
-                show_score_board(data.score);
-            } else {
-                // Otherwise, show the next question
-                if (data.remaining_seconds==0){
-                    showToast('times up', { duration: 2000 });
-                    show_score_board(data.score);
-                }else{
-                  show_question(data.current_question, data.question_text, data.answers,data.remaining_seconds);
-                }
-            }
+          if (data.remaining_seconds==0){
+              showToast('times up', { duration: 2000 });
+              show_score_board(data.score);
+          }else{
+            show_question(data.current_question, data.question_text, data.answers,data.remaining_seconds);
+          }
         } else {
             // Handle specific error messages from the backend
-            if (data.message === 'game not started') {
+             if (data.message === 'all questions answered') {
+                // Show the score board if all questions are answered
+                show_score_board();
+            }else if (data.message === 'game not started') {
                 showToast('لطفاً منتظر بمانید تا بازی شروع شود.', { duration: 2000 });
             } else {
                 // General error message for other cases
+                localStorage.clear();
                 setTimeout(showIntroSection, 1500);
                 showToast('ورود ناموفق. لطفاً دوباره تلاش کنید.', { duration: 1000 });
             }
@@ -178,6 +200,14 @@ function get_next_question(user_token) {
 let remaining_sec = 60*10 ;
 
 function show_question(current_number,question_text,answers,remaining_seconds) {
+  const answerButtons = document.querySelectorAll('.answer_box');
+  answerButtons.forEach(button => button.disabled = false);
+  answerButtons.forEach(button => {
+  const answernum = button.querySelector('.ans_number');
+  const answerText = button.querySelector('.answer_text');
+  answerText.style.backgroundColor = '#ffffff';
+  answerText.style.color = '#000000';
+  });
   document.getElementById('question_container').style.display = 'block';
   setTimeout(() => {document.getElementById('question_container').style.opacity = 1;  }, 200);
   // resetTimer()

@@ -23,10 +23,8 @@ body, html {
 
 
 
-.question_container{
-    display: none;
-}
 .question_container {
+    display: none;
     transition: opacity 0.4s ease-in-out;
     width: 100%;
     opacity: 0;
@@ -96,6 +94,8 @@ body, html {
 
 .question_box {
     padding: 15px;
+    max-width: 600px;
+    margin: auto;
 }
 
 .question_text_div {
@@ -598,7 +598,7 @@ transition: opacity 1s ease-in-out;
 }
 
 .loader img {
-  width: min(100px, 25vw);
+  width: min(80px, 25vw);
   height: auto;
   transform-origin: center;
   animation: loaderPulse 1000ms ease-in-out infinite;
