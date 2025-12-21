@@ -13,6 +13,8 @@
 
 /* General styling */
 body, html {
+    height: 100dvh;
+    overflow: hidden;
     margin: 0;
     padding: 0;
     font-family: 'Modam', sans-serif; 
@@ -427,7 +429,7 @@ label, input {
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     margin-top: 20px;
-    margin-bottom: 60px;
+    margin-bottom: 80px;
     width: 100%; /* Ensure the div takes full width */
 }
 

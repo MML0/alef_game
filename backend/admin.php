@@ -104,7 +104,7 @@ function migrateDatabase() {
     // Check if the password is correct
     if (1) {
         // If password is correct, make a GET request to the migration PHP script
-        const url = `http://0.0.0.0:3000/backend/migration.php?fresh=yes&pass=${password}`;
+        const url = `/backend/migration.php?fresh=yes&pass=${password}`;
         
         // Create a new GET request using the Fetch API
         fetch(url)

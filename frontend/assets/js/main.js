@@ -1,4 +1,5 @@
-const apiUrl = 'http://127.0.0.1:3000/backend'; // Global URL
+// const apiUrl = 'http://127.0.0.1:3000/backend'; // Global URL
+const apiUrl = '/backend'; 
 let token ;
 
 const loaderImages = [
@@ -716,7 +717,7 @@ function check_is_game_ready() {
                 case 'ongoing':
                     setTimeout(show_login_page, 300); // Show the loader after 1 second
                     break;
-                case 'completed':
+                case 'ended':
                     showToast('بازی به پایان رسید.', { duration: 1500 });
                     break;
                 default:
