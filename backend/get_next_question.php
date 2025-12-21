@@ -94,6 +94,10 @@ function getNextQuestion($user_token) {
                         $update_game_status_stmt->execute([$user['id']]);
                     }
                     // If there are no more questions
+                    $update_game_status_stmt = $pdo->prepare("UPDATE users SET game_status = 'completed' WHERE id = ?");
+                    $update_game_status_stmt->execute([$user['id']]);
+
+
                     return [
                         'status' => 'error',
                         'message' => 'all questions answered'

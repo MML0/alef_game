@@ -44,23 +44,23 @@ function insertUserAnswer($user_token, $answer, $question_id) {
             }
             
             // Check if the user's answer is correct
-            $is_correct = ($answer == $question['correct_answer']); // Assuming 'correct_answer' is stored in the question table
+            $is_correct = ($answer == $question['correct_answer']) ? 1 : 0; // 1 for correct, 0 for incorrect
 
             // Insert the user's answer into the database
             $insertStmt = $pdo->prepare("INSERT INTO answers (user_id, question_id, answer, is_correct) 
                                         VALUES (?, ?, ?, ?)");
             $insertStmt->execute([$user['id'], $question_id, $answer, $is_correct]);
-            // incriment q num
+
+            // Increment question number
             $updateScoreStmt = $pdo->prepare("UPDATE users SET current_question = current_question + 1 WHERE id = ?");
             $updateScoreStmt->execute([$user['id']]);
-              
-
 
             // If the answer is correct, increment the user's score
             if ($is_correct) {
                 $updateScoreStmt = $pdo->prepare("UPDATE users SET score = score + 1 WHERE id = ?");
                 $updateScoreStmt->execute([$user['id']]);
             }
+            
             // Return success response
             return [
                 'status' => 'success',
