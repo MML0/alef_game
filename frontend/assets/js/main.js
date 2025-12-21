@@ -1,5 +1,5 @@
-// const apiUrl = 'http://127.0.0.1:3000/backend'; // Global URL
-const apiUrl = '/backend'; 
+const apiUrl = 'http://127.0.0.1:3000/backend'; // Global URL
+// const apiUrl = '/backend'; 
 let token ;
 
 const loaderImages = [
@@ -8,6 +8,30 @@ const loaderImages = [
     'assets/img/BG_anaar.png',
     'assets/img/cloud.png',
 ];
+
+let initialHeight = window.innerHeight;
+
+window.addEventListener('resize', () => {
+    let currentHeight = window.innerHeight;
+    if (currentHeight < initialHeight) {
+        // Keyboard is opened
+        document.body.style.height = initialHeight + 'px';
+        console.log(10);
+        
+    } else {
+        // Keyboard is closed
+        document.body.style.height = '100%';
+    }
+});
+// JavaScript to adjust body height dynamically based on the viewport size
+function adjustViewportHeight() {
+    const vh = window.innerHeight * 0.01; // 1% of the viewport height
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+window.addEventListener('resize', adjustViewportHeight);
+window.addEventListener('load', adjustViewportHeight);
+
 document.addEventListener("DOMContentLoaded", function () {
     const continueBtn = document.getElementById('continueBtn');
     //  همکار عزیز، skip
@@ -168,16 +192,10 @@ function show_score_board () {
       console.log("User Rank Data:", rankData);
 
       if (rankData.status === 'success') {
-
+        document.querySelector('.rankData_user_rank').textContent = convertToPersian(rankData.user_rank.toString());            
+        document.querySelector('.rankData_score').textContent = convertToPersian(rankData.score.toString());            
+        convertMsToTime(rankData.game_duration_ms)
           // Add user rank info to the container
-          scoreBoardContainer.innerHTML += `
-              <div class="user_rank_box">
-                  <h3>رتبه شما</h3>
-                  <p>رتبه: <strong>${rankData.user_rank}</strong></p>
-                  <p>امتیاز: <strong>${rankData.score}</strong></p>
-                  <p>زمان بازی: <strong>${rankData.game_duration_ms} ms</strong></p>
-              </div>
-          `;
 
       } else {
           showToast('Error: ' + rankData.message, { duration: 2000 });
@@ -318,7 +336,16 @@ let seconds = 0;
 let hundredths = 0;
 let startTime = 0; // Stores the timestamp when the timer starts
 let timerInterval = null;  // To store the interval ID
+function convertMsToTime(ms) {
+    const minutes = Math.floor(ms / 60000); // 1 minute = 60000 ms
+    const seconds = Math.floor((ms % 60000) / 1000); // Get remaining seconds
+    const hundredths = Math.floor((ms % 1000) / 10); // Get the hundredths of a second
 
+    // Update the elements with the converted values
+    document.querySelector('.mins').textContent = convertToPersian(minutes);
+    document.querySelector('.secs').textContent = convertToPersian(seconds.toString().padStart(2, '0'));
+    document.querySelector('.th100s').textContent = convertToPersian(hundredths.toString().padStart(2, '0'));
+}
 // Update the timer on the screen
 function updateTimer() {
     document.querySelector('.min').textContent = convertToPersian(minutes);
@@ -392,7 +419,7 @@ function loadImages(callback) {
         timeoutReached = true;
         console.log("Timeout reached, proceeding anyway.");
         callback();  // Proceed after timeout
-    }, 3000);  // 3-second timeout
+    }, 7000);  // 3-second timeout
 
     loaderImages.forEach(src => {
         const img = new Image();  // Create a new image object

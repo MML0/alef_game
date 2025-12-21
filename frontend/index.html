@@ -6,10 +6,12 @@
 
   <link rel="icon" href="favicon.png">
 
-  <link rel="stylesheet" href="assets/css/style.css?v=0.3">
+  <link rel="stylesheet" href="assets/css/style.css?v=0.4">
 
   <!-- Mobile -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, height=device-height">
+
 </head>
 <body>
     <div class="loader" id="appLoader" aria-hidden="true">
@@ -19,12 +21,12 @@
     <div class="story">
         <img src="assets/img/legacy.png" alt="legacy" class="legacy-img">
         <div class="story_photo_container_top">
-            <img src="assets/img/p1.png" alt="person1" class="person-img p1">
-            <img src="assets/img/p2.png" alt="person2" class="person-img p2">
+            <img src="" alt="person1" class="person-img p1">
+            <img src="" alt="person2" class="person-img p2">
         </div>
         <div class="story_photo_container_bottom">
-            <img src="assets/img/p3.png" alt="person3" class="person-img p3">
-            <img src="assets/img/p4.png" alt="person4" class="person-img p4">
+            <img src="" alt="person3" class="person-img p3">
+            <img src="" alt="person4" class="person-img p4">
         </div>
     </div>
     <div class="intro_section">
@@ -115,9 +117,36 @@
     </div>
 </div>
     <div class="score_board_container" id="score_board_container">
-        
+        <div class="sc_first_header">
+            <div class="left_container">
+                <div class="logo_scoreboard">
+                    <img src="assets/img/alef_logo.png" alt="alef_logo" />
+                </div>
+                <div class="sc_header_text"><p class="sc_p user_sc_score rankData_score">۱۰</p></div>
+                <div class="sc_header_text sc_header_text2 time_f timer_div_sc">
+                    <div class="timer sc_timer">
+                        <p class="mins">۱۰</p>:<p class="secs">۰۰</p>:<p class="th100s">۰۰</p>
+                    </div>
+                </div>
+                <div class="sc_header_text_rank right_t sc_rank_div"><p class="sc_p rankData_user_rank">۱۰</p></div>
+            </div>
+            <div class="right_container">
+                <div class="logo_scoreboard">
+                </div>
+                <div class="sc_header_text left_t"><p class="sc_p left_pad corect_ans_t">پاسخ های صحیح:</p></div>
+                <div class="sc_header_text2 left_t cs_time_pass_t">
+                    <p class="your_time_text" class="sc_p sc_p2">زمان پاسخ دهی:</p>
+                </div>
+                <div class="sc_header_text_rank left_t your_rank_text"><p class="sc_p ">رتبه شما:</p></div>
+            </div>
+        </div>
+        <div class="sc_second_header">
+            <img id="top_player_text" src="assets/img/top_player_logo.png" alt="top player">
+            <img id="top_player_logo" src="assets/img/asset1.png" alt="logo">
+        </div>
+
     </div>
 
-    <script src="assets/js/main.js?v=0.3"></script>
+    <script src="assets/js/main.js?v=0.4"></script>
 </body>
 </html>

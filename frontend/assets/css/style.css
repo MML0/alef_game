@@ -13,8 +13,9 @@
 
 /* General styling */
 body, html {
-    height: 100dvh;
+    height: 100%;
     overflow: hidden;
+    /* overflow: auto; */
     margin: 0;
     padding: 0;
     font-family: 'Modam', sans-serif; 
@@ -22,16 +23,175 @@ body, html {
     background-color: #f4f4f4; /* Background color */
     color: #333; /* Text color */
 }
+body {
+    overflow: auto;
+    position: relative;
+}
+body {
+    height: calc(var(--vh, 1vh) * 100); /* Use the dynamic height */
+}
 
 
+
+/* Container for the whole scoreboard */
+.score_board_container {
+    display: block;
+}
+
+/* Header Section */
+.sc_first_header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: row-reverse;
+}
+
+/* Left container */
+.left_container {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+}
+.left_pad{
+        padding-left: 20px;
+}
+/* Right container */
+.right_container {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #15354E;
+    color: white;
+}
+
+/* Logo in the scoreboard */
+.logo_scoreboard  {
+    width: 100%;
+    height: 100px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+.logo_scoreboard img {
+    width: 60px; /* Adjust the size of the logo */
+    height: auto;
+    margin: 30px;
+}
+
+/* Header text */
+.sc_header_text {
+    width: 100%;
+    text-align: right;
+}
+.sc_p2{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.sc_p{
+
+    margin: 10px;
+    padding-right: 20px;
+
+}
+.time_f{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.right_t{
+    text-align: right !important;
+}
+.left_t{
+    text-align: left;
+}
+.sc_timer{
+    justify-content: flex-end !important;
+    padding-right: 30px;
+}
+.sc_header_text2 {
+    width: 100%;
+    height: 40px;
+}
+
+.sc_header_text_rank {
+    width: 100%;
+}
+.your_time_text{
+    padding-left: 20px;
+
+}
+/* Second header */
+.sc_second_header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+#top_player_logo{
+    margin: 0px 20px;
+    height: 100px;
+    width: auto;
+}
+#top_player_text {
+    margin: 0px 20px;
+    height: 60px;
+    width: auto;
+}
+
+/* Top players section */
+.top_players_div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Top player container */
+.top_player_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%; /* Adjust this value to fit the number of players you want visible */
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Player name */
+.top_player_name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Data section for each player */
+.data_section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #777;
+}
+
+
+
+
+/* remove this */
 .score_board_container{
     display: none;
 }
-.score_board_container {
-    padding: 15px;
-    background: #f8f8f8;
-    border-radius: 10px;
-}
+
 .user_rank_box, .scoreboard_box {
     background: white;
     padding: 15px;
@@ -49,10 +209,7 @@ body, html {
     padding: 8px 0;
     border-bottom: 1px solid #eee;
 }
-
-
-
-
+/* remove this */
 
 
 .question_container {
@@ -227,10 +384,50 @@ label, input {
     display: none;
 }
 #intro_page2 p.bold:first-of-type {
-    font-size: 14px;
+    font-size: 1.2rem;
 }
 #intro_page2 p:not(.bold) {
-    font-size: 14px;
+    font-size: 1rem;
+}
+.sc_rank_div{
+    height: 80px;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-family: 'GoftehFaNumWeb', 'Modam';
+        background-color: #AF4122;
+margin-bottom: 20px;
+color: white;
+font-size: 26px;
+}
+.timer_div_sc{
+    height: 60px;
+}
+.cs_time_pass_t{
+    height: 60px;
+}
+.corect_ans_t{
+    height: 33px;
+    margin: 10px 0;
+    font-size: 18px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.your_rank_text{
+    
+    background-color: #57748b;
+margin-bottom: 20px;
+    height: 80px;
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+}
+.user_sc_score{
+    font-size: 20px;
+    font-family: 'GoftehFaNumWeb', 'Modam';
+    height: 33px;
 }
 /* small phone for login page */
 @media (max-height: 720px){
@@ -249,24 +446,24 @@ label, input {
         height: 40px;
         font-size: 18px;
     }
-    .baner{ top:6vh; }
     #intro_page2 p.bold:first-of-type {
-        font-size: 14px;
+        font-size: 1rem;
     }
     #intro_page2 p:not(.bold) {
-        font-size: 13px;
+        font-size: 1rem;
     }
     .intro_text_div {
-        margin-top: 33vh !important;
-            margin-bottom: 5px !important;
+        margin-top: 30vh !important;
+        margin-bottom: 5px !important;
     }
     .baner {
-        top: 6vh !important;
+        top: 4vh !important;
     }
     .header {
         top: 10px !important;}
     .next_btn_div{
-        margin-top: 10px !important;
+        margin-top: 5px !important;
+        margin-bottom: 120px;
     }
 }
 
@@ -304,7 +501,7 @@ label, input {
 
 /* Banner section */
 .baner {
-    top: 11vh;
+    top: 6vh;
     position: fixed;
     z-index: 11; 
     width: 100%;
@@ -384,7 +581,7 @@ label, input {
     text-align: right;
     margin: 10px;
     margin-bottom: 20px;
-    margin-top: 36vh;
+    margin-top: 30vh;
     max-width: 370px;
     background-color: #15354E00;
 }
@@ -428,8 +625,8 @@ label, input {
     display: flex; /* Enable Flexbox */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
-    margin-top: 20px;
-    margin-bottom: 80px;
+    margin-top: 10px;
+    margin-bottom: 130px;
     width: 100%; /* Ensure the div takes full width */
 }
 
